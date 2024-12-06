@@ -1,0 +1,172 @@
+<p-toast></p-toast>
+
+<p-card>
+    <div style=" margin-left: 30px;">
+        <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+    </div>
+    <div class="container-fluid mb-7 mr-5">
+        <div class="container-fluid mb-7 mr-5" style="margin-right: -10px;">
+            <div class="flex justify-content-end">
+                <button icon="pi pi-plus" pButton pRipple label="Novo equipamento" class="p-button-success"
+                    (click)="criarNovoEquipamento()"></button>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="header-container d-flex align-items-center mb-4">
+                <!-- Título com margem à esquerda para movê-lo para a direita -->
+                <div class="titulo" style="margin-left: 10px;">
+                    <h1 class="titulo-pagina" style="font-size: 1.5rem; color: rgb(8, 105, 8); margin-right: 10px;">
+                        <strong>Cadastro de equipamentos</strong>
+                    </h1>
+                </div>
+                <p-divider class="divider" type="solid"></p-divider>
+                <div class="search-container p-input-icon-left ml-auto" style="position: relative; margin-right: 15px;">
+                    <i class="pi pi-search"
+                        style="position: absolute; left: 10px; top: 65%; transform: translateY(-50%);"></i>
+                    <input class="input-pesquisar" pInputText type="text" placeholder="Pesquisar"
+                        style="padding-left: 30px;" [(ngModel)]="pesquisar" (ngModelChange)="filtrarEquipamentos()">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Spinner exibido enquanto a página carrega -->
+        <div *ngIf="isLoading" class="spinner-container">
+            <p-progressSpinner ariaLabel="loading" [style]="{ width: '50px', height: '50px' }" strokeWidth="4"
+                class="green-spinner"></p-progressSpinner>
+        </div>
+        
+        <p-table *ngIf="!isLoading" dataKey="id" [value]="equipamentosFiltrados"
+            styleClass="p-datatable-striped custom-table" [tableStyle]="{ 'min-width': '20rem', 'width': '100%' }"
+            [expandedRowKeys]="expandedRows" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 2%;"></th>
+
+                    <th pSortableColumn="tipoEquipamento" style="min-width: 180px; font-size: 13px;">
+                        Tipo de equipamento <p-sortIcon field="tipoEquipamento"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="identificador" style="min-width: 150px; font-size: 13px;">
+                        Identificador <p-sortIcon field="identificador"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="anoModelo" style="min-width: 130px; font-size: 13px;">
+                        Ano modelo <p-sortIcon field="anoModelo"></p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="tipoCombustivel" style="min-width: 150px; font-size: 13px;">
+                        Combustível <p-sortIcon field="tipoCombustivel"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="descricaoCor" style="min-width: 110px; font-size: 13px;">
+                        Cor <p-sortIcon field="descricaoCor"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="siglaLotacao" style="min-width: 130px; font-size: 13px;">
+                        Lotação <p-sortIcon field="siglaLotacao"></p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="siglaSubLotacao" style="min-width: 150px; font-size: 13px;">
+                        Sublotação <p-sortIcon field="siglaSubLotacao"></p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="estadoConservacao" style="min-width: 160px; font-size: 13px;">
+                        Estado de conservação <p-sortIcon field="estadoConservacao"></p-sortIcon>
+                    </th>
+
+                    <th style="min-width: 110px; font-size: 13px;">Ações</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-equipamento let-expanded="expanded">
+                <tr>
+                    <td>
+                        <p-button type="button" pRipple [pRowToggler]="equipamento" [text]="true" [rounded]="true"
+                            [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                            class="expand-icon" />
+                    </td>
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        {{getDescricaoTipoEquipamento(equipamento.tipoEquipamento)}}
+                    </td>
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        <div>{{ equipamento.identificador }}</div>
+                    </td>
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        {{ equipamento.anoFabricacao }}
+                    </td>
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        {{getCodigoTipoCombustivelEquipamentoPorDescricao (equipamento.tipoCombustivel) }}
+                    </td>
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        {{ equipamento.cor ? equipamento.cor.descricao : '' }}
+                    </td>
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        {{ equipamento.siglaLotacao}}
+                    </td>
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        {{ equipamento.siglaSubLotacao }}
+                    </td>
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        <span class="p-badge p-component" style="background-color: {{equipamento.estadoConservacao == 1 ? '#326fd1' : equipamento.estadoConservacao == 2 ? 
+                        '#1C5638' :equipamento.estadoConservacao == 3 ? '#c69606' : '#a40d0d' }};">
+                            {{ getEstadoDeConservacaoDescricao(equipamento.estadoConservacao) }}
+                        </span>
+
+                    </td>
+                    <td class="table-cell table-cell-large" style="font-size: 20px;">
+                        <p-button class="custom-button" (click)="editarEquipamento(equipamento.id)">
+                            <i class="pi pi-pencil"></i>
+                        </p-button>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="rowexpansion" let-equipamento>
+                <tr>
+                    <td colspan="14">
+                        <div class="container-fluid" style=" margin-left: 30px;">
+                            <div class="row mb-4 mt-5"> <!-- Coloquei as colunas dentro da mesma row -->
+                                <div class="col-md-5 ps-4">
+                                    <!-- Alterei para col-md-6 para dividir o espaço em duas colunas -->
+                                    <div class="mb-4">
+                                        <strong class="fs-6">Dados de aquisição</strong>
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;"><strong> Numero da nota
+                                            fiscal:</strong>
+                                        {{ equipamento.notaFiscalEquipamentoDTO.numeroNotaFiscal }}
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;"><strong>Data da compra:</strong>
+                                        {{
+                                        equipamento.notaFiscalEquipamentoDTO.horaEdataEmissao | date:'dd/MM/yyyy'}}
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;"><strong>Valor da compra:</strong>
+                                        {{
+                                        equipamento.notaFiscalEquipamentoDTO.valorDaNotaFiscal |
+                                        currency:'BRL':'symbol':'1.2-2':'pt-BR'
+                                        }}
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;"><strong>Empresa
+                                            revendedora:</strong> {{
+                                        equipamento.notaFiscalEquipamentoDTO.nomeEmpresa
+                                        }}
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;"><strong>Numero tombo:</strong> {{
+                                        equipamento.tombo
+                                        }}
+                                    </div>
+                                </div>
+                                <div class="col-md-5 ps-4">
+                                    <div class="mb-4">
+                                        <strong class="fs-6">Descrição do equipamento</strong>
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;">
+                                        {{ equipamento.notaFiscalEquipamentoDTO.descricao }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-card>

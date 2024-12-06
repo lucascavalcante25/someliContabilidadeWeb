@@ -1,0 +1,126 @@
+.divider {
+    flex-grow: 1;
+    margin-left: 60px;
+    margin-right: 60px;
+    height: 45px;
+}
+
+:host ::ng-deep .custom-button .p-button {
+    padding: 6px 8px;
+    background-color: rgb(229, 57, 53);
+    border-color: rgb(229, 57, 53);
+}
+
+:host ::ng-deep .custom-button .p-button:disabled {
+    background-color: #6c757d !important; /* Cor de fundo cinza */
+    border-color: #6c757d !important; /* Cor da borda cinza */
+    color: white !important; /* Cor do texto branco */
+    opacity: 1 !important; /* Opacidade total */
+    cursor: not-allowed !important; /* Cursor indicando que está desabilitado */
+    box-shadow: none !important; /* Remove qualquer sombra */
+}
+
+  
+
+  :host ::ng-deep  .flex {
+    display: flex !important;
+    margin-top: -3rem;
+}
+
+.p-button {
+  border-radius: 7px;
+  /* box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.08), 0px 3px 4px rgba(0, 0, 0, 0.1), 0px 1px 4px -1px rgba(0, 0, 0, 0.1); */
+  text-transform: initial;
+  padding: 10px 10px;  /* Ajuste de padding para reduzir o tamanho */
+  font-size: 1rem; /* Reduzindo o tamanho da fonte */
+  height: auto;       /* Deixa a altura do botão ajustável ao conteúdo */
+  width: auto;  
+  margin-right: 20px;      /* Ajusta a largura automaticamente ao conteúdo */
+}
+
+.ui-datepicker {
+  z-index: 10000 !important; /* Garante que o calendário esteja no topo de outros elementos */
+}
+
+.custom-button .p-button-disabled {
+    background-color: #6c757d !important; /* Cor de fundo cinza */
+    border-color: #6c757d !important; /* Cor da borda cinza */
+    color: white !important; /* Cor do texto branco */
+    opacity: 1 !important; /* Mantém a opacidade para ficar mais visível */
+    cursor: not-allowed !important; /* Cursor de não permitido */
+    box-shadow: none !important; /* Remove qualquer sombra */
+}
+
+:host ::ng-deep.custom-button.historico-button .p-button {
+  background-color: #fd7e14 !important; /* Laranja */
+  border-color: #fd7e14 !important;
+  color: white !important; /* Texto branco */
+}
+
+:host ::ng-deep .p-button {
+  border-radius: 7px;
+  padding: 10px 10px;
+  font-size: 1rem;
+  height: auto;
+  width: auto;
+}
+
+:host ::ng-deep .cancel-button {
+  background-color: transparent;
+  color: #28a745;
+  border: none;
+  font-weight: bold;
+}
+
+:host ::ng-deep .cancel-button:hover {
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+:host ::ng-deep .encerrar-button {
+  background-color: #28a745 !important;
+  color: white !important;
+  font-weight: bold;
+  border: none;
+}
+
+:host ::ng-deep .encerrar-button:hover {
+  background-color: #218838 !important;
+}
+
+:host ::ng-deep .ui-datepicker {
+  z-index: 10000 !important;
+}
+
+:host ::ng-deep p-calendar {
+  width: 100%;
+}
+
+/* Exemplo de customização para mensagens de erro */
+.ui-toast .ui-toast-message-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+.ui-toast .ui-toast-message-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  height: 100vh;
+  margin-top: -270px; 
+}
+
+:host ::ng-deep .p-progress-spinner-circle {
+    stroke: green !important;
+}
+
+:host ::ng-deep .custom-table {
+  margin-left: -25px;
+  }
+

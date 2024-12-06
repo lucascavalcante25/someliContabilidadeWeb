@@ -1,0 +1,179 @@
+<p-card>
+    <div style=" margin-left: 30px;">
+        <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+    </div>
+    <div class="container-fluid mb-7 mr-5">
+        <div class="container-fluid mb-7 mr-5" style="margin-right: -10px;">
+            <div class="flex justify-content-end">
+                <button icon="pi pi-plus" pButton pRipple label="Novo motorista" class="p-button-success"
+                    (click)="criarNovoMotorista()"></button>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="header-container d-flex align-items-center mb-4">
+                <div class="titulo" style="margin-left: 10px;">
+                    <h1 class="titulo-pagina" style="font-size: 1.5rem; color: rgb(8, 105, 8); margin-right: 10px;">
+                        <strong>Cadastro de motoristas</strong>
+                    </h1>
+                </div>
+                <p-divider class="divider" type="solid"></p-divider>
+                <div class="search-container p-input-icon-left ml-auto" style="position: relative; margin-right: 15px;">
+                    <i class="pi pi-search"
+                        style="position: absolute; left: 10px; top: 65%; transform: translateY(-50%);"></i>
+                    <input class="input-pesquisar" pInputText type="text" placeholder="Pesquisar"
+                        style="padding-left: 30px;" [(ngModel)]="pesquisar" (ngModelChange)="filtrarMotoristas()">
+
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="spinner-container">
+            <p-progressSpinner ariaLabel="loading" [style]="{ width: '50px', height: '50px' }" strokeWidth="4"
+                class="green-spinner"></p-progressSpinner>
+        </div>
+
+        <p-table *ngIf="!isLoading" dataKey="pessoa.seqPessoa" [value]="motoristasFiltrados"
+            styleClass="p-datatable-striped custom-table" [tableStyle]="{ 'min-width': '20rem', 'width': '100%' }"
+            [expandedRowKeys]="expandedRows" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="cabecalho" style="width: 2%;"></th>
+
+                    <th class="cabecalho" pSortableColumn="pessoa.nome" style="min-width: 180px; font-size: 13px;">
+                        Motorista <p-sortIcon field="pessoa.nome"></p-sortIcon>
+                    </th>
+                    <th class="cabecalho" pSortableColumn="pessoa.codigoPessoa"
+                        style="min-width: 110px; font-size: 13px;">
+                        CPF <p-sortIcon field="pessoa.codigoPessoa"></p-sortIcon>
+                    </th>
+                    <th class="cabecalho" pSortableColumn="cnh" style="min-width: 110px; font-size: 13px;">
+                        CNH <p-sortIcon field="cnh"></p-sortIcon>
+                    </th>
+
+                    <th class="cabecalho" pSortableColumn="codCategoriaCnh" style="min-width: 210px; font-size: 13px;">
+                        Categoria CNH <p-sortIcon field="codCategoriaCnh"></p-sortIcon>
+                    </th>
+
+                    <th class="cabecalho" pSortableColumn="situacaoCnh" style="min-width: 200px; font-size: 13px;">
+                        Situação CNH <p-sortIcon field="situacaoCnh"></p-sortIcon>
+                    </th>
+                    <th class="cabecalho" pSortableColumn="siglaLotacao" style="min-width: 200px; font-size: 13px;">
+                        Lotação <p-sortIcon field="siglaLotacao"></p-sortIcon>
+                    </th>
+                    <th class="cabecalho" pSortableColumn="siglaSublotacao" style="min-width: 200px; font-size: 13px;">
+                        Sublotação <p-sortIcon field="siglaSublotacao"></p-sortIcon>
+                    </th>
+
+                    <th class="cabecalho" pSortableColumn="staMotorista" style="min-width: 150px; font-size: 13px;">
+                        Status <p-sortIcon field="staMotorista"></p-sortIcon>
+                    </th>
+
+                    <th style="min-width: 120px; font-size: 13px;">Ações</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-motorista let-expanded="expanded">
+                <tr>
+                    <td>
+                        <p-button type="button" pRipple [pRowToggler]="motorista" [text]="true" [rounded]="true"
+                            [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                            class="expand-icon"></p-button>
+                    </td>
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        {{ motorista.pessoa.nome }}
+                    </td>
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        <div>{{ motorista.pessoa.codigoPessoa }}</div>
+                    </td>
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">{{ motorista.cnh }}</td>
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">{{
+
+                        getCodigoCnhDescricao(motorista.codCategoriaCnh) }}</td>
+
+                    <td class="table-cell table-cell-large">
+                        <span class="p-badge p-component" style="background-color: {{ motorista.situacaoCnh === 'CNH vencida'
+                         ? '#a40d0d' : (motorista.situacaoCnh === 'Próxima de vencer' ? '#c69606' : '#1C5638') }}; 
+                        color: white;font-size: 12px;">{{ motorista.situacaoCnh }}</span>
+                    </td>
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">{{ motorista.siglaLotacao}}</td>
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">{{ motorista.siglaSublotacao}}</td>
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        <span class="p-badge p-component" style="background-color: {{ motorista.staMotorista == 1 ? '#E6F4EA' : '#F0F0F0' }};
+                                     color: {{ motorista.staMotorista == 1 ? '#1C5638' : '#808080' }};
+                                     border-radius: 6px; 
+                                     padding: 4px 10px;
+                                     display: inline-flex;
+                                     align-items: center;
+                                     justify-content: center;
+                                     font-weight: bold;
+                                     font-size: 13px;">
+                            {{ motorista.staMotorista == 1 ? 'Ativo' : 'Inativo' }}
+                        </span>
+                    </td>
+
+
+                    <td class="table-cell table-cell-large" style="font-size: 12px;">
+                        <p-button class="custom-button" (click)="editarMotorista(motorista.id)">
+                            <i class="pi pi-pencil"></i>
+                        </p-button>
+                    </td>
+
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="rowexpansion" let-motorista>
+                <tr>
+                    <td colspan="14">
+                        <div class="container-fluid" style=" margin-left: 30px;">
+                            <div class="row mb-4 mt-5" style="margin-right: 600px;">
+                                <div class="col-md-4 ps-2">
+                                    <div class="mb-4">
+                                        <strong class="fs-6">Dados de contato</strong>
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;"><strong>Endereço:</strong>
+                                        {{ motorista.pessoa.logradouro }},
+                                        {{motorista.pessoa.numLogradouro}} - {{motorista.pessoa.bairro}} -
+                                        {{motorista.pessoa.nomeMunicipio}} - {{motorista.pessoa.nomeUF}}</div>
+                                    <div class="d-block mb-2" style="font-size: 12px;"><strong>Telefone:</strong> {{
+                                        motorista.numTelefone
+                                        }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 ps-2">
+                                    <div class="mb-4">
+                                        <strong class="fs-6">Informações da CNH</strong>
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;"><strong>Validade CNH:</strong> {{
+                                        formatDate(motorista.validadeCnh) }}</div>
+                                </div>
+                                <div class="col-md-4 ps-2">
+                                    <div class="mb-4">
+                                        <strong class="fs-6">Admissão</strong>
+                                    </div>
+                                    <div class="d-block mb-2" style="font-size: 12px;">
+                                        <strong>Data:</strong>
+                                        {{ isValidDate(motorista.pessoa?.dataAdmissao) ?
+                                        formatDate(motorista.pessoa?.dataAdmissao) : 'Data não disponível' }}
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-card>

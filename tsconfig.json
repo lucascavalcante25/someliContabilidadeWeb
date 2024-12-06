@@ -4,6 +4,10 @@
     "compilerOptions": {
       "baseUrl": "./",
       "outDir": "./dist/out-tsc",
+      "paths": {
+        "@enums": ["src/app/core/enums"],
+        "@services": ["src/app/core/services"],
+      } ,
       "forceConsistentCasingInFileNames": true,
       "strict": false,
       "noImplicitOverride": true,

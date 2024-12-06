@@ -1,0 +1,42 @@
+.breadcrumb-item {
+  font-size: 16px;
+  color: #1C5638 !important;
+  font-family: 'Inter', sans-serif;
+}
+
+.breadcrumb-back {
+  background-color: #EBF5F0 !important;
+  padding: 1px;
+  border-radius: 8px;
+  color: #0ea557;
+}
+
+.breadcrumb-item.active {
+  font-weight: 700;
+  color: #056132 !important;
+  background-color: #EBF5F0 !important;
+  padding: 3px 6px;
+  border-radius: 8px;
+}
+
+.breadcrumb-separator {
+  color: #A0AEC0;
+}
+
+.text-reset {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+}
+
+.breadcrumb-back {
+  background-color: rgba(235, 245, 240, 0.8);
+  padding: 8px;
+  border-radius: 12px;
+  display: inline-block;
+  color: #0ea557;
+}
+
+.breadcrumb-back i {
+  font-size: 18px;
+  display: block;
+}

@@ -1,0 +1,115 @@
+<div style=" margin-left: 60px; margin-top: 40px;">
+    <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+</div>
+
+<p-card class="custom-card-margin">
+    <form [formGroup]="informacoesForm" (ngSubmit)="prosseguir()">
+        <div class="d-flex align-items-center mt-0">
+            <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap:nowrap">
+                <strong>Informe os dados para pesquisa detalhada, ou prossiga para uma lista completa.</strong>
+            </h1>
+            <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+            </div>
+        </div>
+    
+        <div class="p-fluid grid formgrid">
+            <div class="field col-3">
+                <label style="font-size: 13px;color: rgb(43, 42, 42);" for="motorista">Motorista*</label>
+                <p-treeSelect class="w-full" id="motorista"
+                    [options]="motoristasTree" 
+                    optionLabel="label" 
+                    optionValue="value" 
+                    formControlName="motorista"
+                    placeholder="Selecione um motorista" 
+                    selectionMode="single" 
+                    [filter]="true"
+                    filterPlaceholder="Nome, CPF ou matrícula do motorista">
+                </p-treeSelect>
+            </div>
+    
+            <div class="field col-3">
+                <label style="font-size: 13px; color: rgb(43, 42, 42);" for="veiculo">Placa ou modelo do veículo*</label>
+                <p-treeSelect class="w-full" id="veiculo"
+                    [options]="veiculosTree" optionLabel="label" optionValue="value" formControlName="veiculo"
+                    placeholder="Selecione um veículo" selectionMode="single" [filter]="true"
+                    filterPlaceholder="Digite para filtrar">
+                </p-treeSelect>
+            </div>
+    
+            <div class="field col-3">
+                <label style="font-size: 13px; color: rgb(43, 42, 42);" for="dataInicio">Data inicial*</label>
+                <p-calendar [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy"
+                    placeholder="Selecione uma data" formControlName="dataInicio"></p-calendar>
+            </div>
+    
+            <div class="field col-3">
+                <label style="font-size: 13px; color: rgb(43, 42, 42);" for="dataFim">Data final*</label>
+                <p-calendar [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy"
+                    placeholder="Selecione uma data" formControlName="dataFim"></p-calendar>
+            </div>
+        </div>
+
+    
+        <div class="d-flex justify-content-end mt-4">
+            <p-button *ngIf="!id" label="LIMPAR" [text]="true" [raised]="true" (click)="resetForm()" class="mx-2"
+            severity="success" />
+            <button type="submit" pButton label="Prosseguir" class="p-button-success"></button>
+        </div>
+    </form>
+    
+
+</p-card>
+
+<p-card *ngIf="dadosConfirmados" class="no-top">
+    <div *ngIf="isLoading" class="spinner-container">
+        <p-progressSpinner ariaLabel="loading" [style]="{ width: '50px', height: '50px' }" strokeWidth="4"
+            class="green-spinner"></p-progressSpinner>
+    </div>
+    <p-table *ngIf="!isLoading" dataKey="veiculoMotorista.id" [value]="veiculosMotoristasFiltrados"
+        styleClass="p-datatable-striped custom-table" [tableStyle]="{ 'min-width': '20rem', 'width': '100%' }"
+        [expandedRowKeys]="expandedRows" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30]">
+        
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="cabecalho" style="width: 2%;"></th>
+                <th class="cabecalho" pSortableColumn="motorista.pessoaId"
+                style="min-width: 180px; font-size: 13px;">
+                    Motorista <p-sortIcon field="motorista.pessoaId"></p-sortIcon>
+                </th>
+                <th class="cabecalho" pSortableColumn="veiculo.codMarcaModelo"
+                style="min-width: 180px; font-size: 13px;">
+                    Veiculo <p-sortIcon field="veiculo.codMarcaModelo"></p-sortIcon>
+                 </th>
+                 <th class="cabecalho" pSortableColumn="inicioVinculacao"
+                 style="min-width: 180px; font-size: 13px;">
+                    Data inicio vínculo <p-sortIcon field="inicioVinculacao"></p-sortIcon>
+                </th>
+                <th class="cabecalho" pSortableColumn="fimVinculacao"
+                style="min-width: 180px; font-size: 13px;">
+                    Data fim vínculo <p-sortIcon field="fimVinculacao"></p-sortIcon>
+                </th>
+            
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-veiculoMotorista let-expanded="expanded">
+            <tr>
+                <td></td>
+                <td class="table-cell table-cell-large" style="font-size: 12px; padding-bottom: 10px ">
+                    {{ veiculoMotorista.motoristaDTO.pessoa.nome }}
+                </td>
+                <td class="table-cell table-cell-large" style="font-size: 12px; padding-bottom: 10px">
+                    {{ veiculoMotorista.veiculoConsultaCompletaDTO.desc_marca_modelo }}
+                </td>
+                <td class="table-cell table-cell-large" style="font-size: 12px; padding-bottom: 10px">
+                    {{ formatarData(veiculoMotorista.inicioVinculacao) }}
+                </td>
+                <td class="table-cell table-cell-large" style="font-size: 12px; padding-bottom: 10px">
+                    {{ formatarData(veiculoMotorista.fimVinculacao) }}
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</p-card>

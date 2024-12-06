@@ -1,0 +1,29 @@
+<p-toolbar>
+  <div class="p-toolbar-group-start">
+    <p-button [rounded]="true" [text]="true" icon="pi pi-bars" class="cor-branca" (click)="toggleMenu()"></p-button>
+    <img class="secretaria-toolbar-logo" src="./assets/images/Logo - SGF.png" alt="logo secretaria da fazenda"
+      [routerLink]="['/']" style="cursor: pointer;" />
+  </div>
+  <div class="p-toolbar-group-end">
+    <div class="linha-vertical">
+      <p-avatar label="{{ userInitial }}" styleClass="mr-5" size="normal" [style]="{
+          'background-color': '#479C23',
+          color: '#ffffff',
+          cursor: 'pointer'
+        }" shape="circle"></p-avatar>
+
+    </div>
+    <button class="p-link logout">
+      <i class="pi pi-sign-out"></i>
+    </button>
+  </div>
+</p-toolbar>
+
+<p-sidebar [(visible)]="menuAberto" [position]="'left'" [modal]="true">
+  <div style="height: 100%; overflow: auto">
+    <p-panelMenu [model]="menus" [style]="{ width: '100%' }" [multiple]="true"></p-panelMenu>
+  </div>
+</p-sidebar>
+
+<!-- Aqui é onde o conteúdo do componente index será renderizado -->
+<router-outlet></router-outlet>

@@ -1,0 +1,291 @@
+<div *ngIf="isLoading" class="spinner-container">
+    <p-progressSpinner ariaLabel="loading" [style]="{ width: '50px', height: '50px' }" strokeWidth="4"
+        class="green-spinner"></p-progressSpinner>
+</div>
+
+<div *ngIf="!isLoading">
+    <div class="custom-margin">
+        <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+    </div>
+
+    <p-card class="custom-card-margin">
+        <div class="d-flex align-items-center mt-0">
+            <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap:nowrap">
+                <strong>Detalhes da solicitação de serviço</strong>
+            </h1>
+            <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-start; margin-top: 1rem;">
+            <div style="margin-left: 5px; margin-right: 15px;">
+                <h5 style="font-size: 18px; margin-bottom:10px; color: black;"><strong>Dados da solicitação</strong>
+                </h5>
+                <!-- Conteúdo do card -->
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Status:</strong>
+                    <span class="p-badge p-component"
+                        *ngIf="solicitacaoSelecionada && solicitacaoSelecionada.statusSolicitacaoServico" [ngStyle]="{
+                            'background-color': solicitacaoSelecionada.statusSolicitacaoServico == 1 ? '#E6F4EA' : solicitacaoSelecionada.statusSolicitacaoServico == 2 ? '#F0F0F0' : '#a40d0d',
+                            'color': solicitacaoSelecionada.statusSolicitacaoServico == 1 ? '#1C5638' : solicitacaoSelecionada.statusSolicitacaoServico == 2 ? '#808080' : '#FFFFFF',
+                            'border-radius': '4px'
+                        }">
+                        {{ getSituacaoDescricao(solicitacaoSelecionada.statusSolicitacaoServico) }}
+                    </span>
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Data da solicitação:</strong> {{solicitacaoSelecionada.dataSolicitacao | date:
+                    'dd/MM/yyyy'}}
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Solicitado por:</strong> {{solicitacaoSelecionada.usuarioSolicitanteId }}
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Descrição:</strong> {{solicitacaoSelecionada.descricaoSolicitacao }}
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Tipo de manutenção:</strong> {{
+                    getDescricaoTipoManutencao(solicitacaoSelecionada.tipoManutencao) }}
+                </p>
+            </div>
+            <div style="margin-left: 5px;">
+                <h5 style="font-size: 18px; margin-bottom:10px; color: black;"><strong>Dados do veículo</strong></h5>
+                <!-- Conteúdo do card -->
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Placa:</strong> {{solicitacaoSelecionada.placa }}
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Marca/Modelo:</strong> {{solicitacaoSelecionada.veiculo?.marcaModeloDTO?.nome }}
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Capacidade/Potência/Cilindrada:</strong>
+                    {{ solicitacaoSelecionada.veiculo?.qtd_passageiros_vcl }} /
+                    {{ solicitacaoSelecionada.veiculo?.num_potencia_vcl }} /
+                    {{ solicitacaoSelecionada.veiculo?.num_cilindradas_vcl }}
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Alocação:</strong> {{solicitacaoSelecionada.siglaLotacao}} -
+                    {{solicitacaoSelecionada.siglaSublotacao}}
+                </p>
+                <p *ngIf="solicitacaoSelecionada.motorista?.pessoa?.nome" class="mb-1-custom"
+                    style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Motorista:</strong> {{solicitacaoSelecionada.motorista?.pessoa?.nome}}
+                </p>
+            </div>
+        </div>
+    </p-card>
+    <p-card *ngIf="vistoriaRealizada && !vistoriaRecusada">
+        <div style="display: flex; align-items: center; margin-top: 0;">
+            <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; white-space: nowrap;">
+                <strong>Detalhes da vistoria</strong>
+            </h1>
+            <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-start; margin-top: 1rem;">
+            <div style="margin-left: 5px; margin-right: 15px;">
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Razão social:</strong> {{ razaoSocial }}
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>CNPJ:</strong> {{ formatarCNPJ(solicitacaoSelecionada?.vistoria?.seqPessoaFisicaJuridica) }}
+                </p>
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Motorista:</strong> {{ solicitacaoSelecionada?.vistoria?.motoristaDTO?.pessoa?.nome }}
+                </p>
+                <!-- Primeiro parágrafo: Serviços incluídos na vistoria -->
+                <p *ngIf="solicitacaoSelecionada?.vistoria?.dscServicoVistoria" class="mb-1-custom"
+                    style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Serviços incluídos na vistoria:</strong>
+                    {{ solicitacaoSelecionada?.vistoria?.dscServicoVistoria }}
+                </p>
+
+                <!-- Segundo parágrafo: Observações da vistoria -->
+                <p *ngIf="solicitacaoSelecionada?.vistoria?.dscObservacaoVistoria" class="mb-1-custom"
+                    style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Observações da vistoria:</strong>
+                    {{ solicitacaoSelecionada?.vistoria?.dscObservacaoVistoria }}
+                </p>
+
+                <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                    <strong>Quilometragem atual:</strong> {{ solicitacaoSelecionada?.vistoria?.vlrQuilometragem |
+                    number:'1.0-2'}} KM
+                </p>
+            </div>
+        </div>
+    </p-card>
+
+    <!-- Card para Vistoria Recusada - exibido apenas quando `vistoriaRecusada` é true e mostra apenas Observações da vistoria -->
+    <p-card *ngIf="vistoriaRecusada">
+        <div style="display: flex; align-items: center; margin-top: 0;">
+            <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; white-space: nowrap;">
+                <strong>Vistoria</strong>
+            </h1>
+            <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+            </div>
+        </div>
+        <div style="margin-top: 1rem;">
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                <strong>Serviço aprovado?</strong> Não
+            </p>
+        </div>
+        <div style="margin-top: 1rem;">
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                <strong>Justificativa:</strong> {{ solicitacaoSelecionada?.vistoria?.justificativa }}
+            </p>
+        </div>
+    </p-card>
+
+    <!-- Card para Vistoria Não Realizada - exibido quando nenhuma vistoria foi realizada ou recusada -->
+    <p-card *ngIf="!showVistoria && !vistoriaRealizada && !vistoriaRecusada" [ngStyle]="{'padding': '1rem'}">
+        <div style="display: flex; align-items: center; margin-top: 0;">
+            <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; white-space: nowrap;">
+                <strong>Vistoria</strong>
+            </h1>
+            <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+            </div>
+        </div>
+        <div style="text-align: center; padding: 2rem;">
+            <p>A vistoria ainda não foi realizada.</p>
+            <button pButton type="button" (click)="realizarVistoria()" label="Realizar vistoria" class="glow-button"
+                style="background-color: #28a745; color: white; padding: 0.5rem 1rem; font-size: 14px; border-radius: 4px; border-color: #28a745;">
+            </button>
+        </div>
+    </p-card>
+
+    <p-card *ngIf="showVistoria" [ngStyle]="{'padding': '1rem'}" [ngStyle]="{ 'width': '100%', 'max-width': '800px', 'margin': 'auto' }">
+        <form [formGroup]="formulario">
+
+            <div class="d-flex align-items-center mt-0">
+                <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap:nowrap">
+                    <strong>Vistoria</strong>
+                </h1>
+                <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                    <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+                </div>
+            </div>
+
+            <div class="field col-3 custom-field" style="margin-left: -10px;">
+                <h5 style="font-size: 18px; margin-bottom:10px; color: black;"><strong>Serviços solicitados</strong>
+                </h5>
+                <p style="color: #333; margin-top: -5px;">{{ solicitacaoSelecionada.descricaoSolicitacao }}</p>
+            </div>
+
+            <div class="p-fluid grid formgrid">
+                <!-- <div class="field custom-field" style="display: flex; flex-direction: column; gap: 15px;"> -->
+                <div class="field col-4">
+                    <label style="font-size: 13px; color: rgb(43, 42, 42);">Solicitação aprovada?</label>
+                    <p-treeSelect class="md:w-100rem w-full" containerStyleClass="w-full" id="aprovaSimOuNao"
+                        [options]="approvalOptions" [(ngModel)]="isApproved" optionLabel="label" optionValue="key"
+                        formControlName="aprovaSimOuNao" placeholder="Selecione uma opção">
+                    </p-treeSelect>
+                </div>
+
+                <div *ngIf="isApproved && isApproved.data == 'nao'" class="field col-10">
+                    <label style="font-size: 13px; color: rgb(43, 42, 42);" for="cnh">Justificativa*</label>
+                    <textarea class="md:w-40rem w-full" containerStyleClass="w-full" pInputTextarea id="justification"
+                        [(ngModel)]="justification" rows="3" formControlName="justificativa"
+                        placeholder="Descreva a razão pela qual a solicitação não foi aprovada.">
+                    </textarea>
+                    <div
+                        *ngIf="formulario.get('justificativa').hasError('required') && (formulario.get('justificativa').dirty || formulario.get('justificativa').touched)">
+                        <small class="p-error">Campo obrigatório.</small>
+                    </div>
+                </div>
+
+
+                <div class="field col-4 custom-field" *ngIf="isApproved && isApproved.data == 'sim'">
+                    <label style="font-size: 13px; color: rgb(43, 42, 42);" for="cnpj">CNPJ da oficina
+                        indicada*</label>
+                    <input type="text" pInputText formControlName="cnpj"
+                        (blur)="consultarPessoaJuridica($event.target.value)" placeholder="Digite o CNPJ" maxlength="18"
+                        (input)="applyCnpjMask($event.target.value)">
+                </div>
+
+                <div class="field col-4 custom-field" *ngIf="isApproved && isApproved.data == 'sim'">
+                    <label style="font-size: 13px; color: rgb(43, 42, 42);" for="razaoSocialOficina">Razão Social da
+                        oficina*</label>
+                    <input type="text" pInputText formControlName="razaoSocialOficina"
+                        placeholder="Digite a Razão Social">
+                </div>
+
+                <div class="field col-6" *ngIf="isApproved && isApproved.data == 'sim'">
+                    <label style="font-size: 13px; color: rgb(43, 42, 42);">Motorista responsável pelo serviço</label>
+                    <p-treeSelect class="md:w-100rem w-full" containerStyleClass="w-full" required="true" id="motorista"
+                        [options]="motoristaOptions" formControlName="motorista" placeholder="Selecione uma opção"
+                        [(ngModel)]="selectedMotorista" optionLabel="label" [filter]="true" optionValue="key">
+                    </p-treeSelect>
+                </div>
+
+                <div class="field col-4 custom-field" *ngIf="isApproved && isApproved.data == 'sim'">
+                    <label style="font-size: 13px; color: rgb(43, 42, 42);" for="quilomentragemAtual">Quilometragem
+                        atual do
+                        veículo*</label>
+                    <input type="text" pInputText id="quilomentragemAtual" formControlName="quilomentragemAtual"
+                        placeholder="Insira a quilometragem atual" mask="separator" thousandSeparator="." suffix=" KM"
+                        maxlength="15" />
+                </div>
+
+                <div *ngIf="isApproved && isApproved.data == 'sim'" class="field col-6">
+                    <label style="font-size: 13px; color: rgb(43, 42, 42);" for="servicosIncluidos">Serviços a serem
+                        incluídos na solicitação</label>
+                    <textarea class="md:w-40rem w-full" containerStyleClass="w-full" pInputTextarea
+                        id="servicosIncluidos" rows="3" formControlName="servicosIncluidos"
+                        placeholder="Liste aqui os serviços a serem incluídos na solicitação." style="height: 38px;"
+                        maxlength="1000">
+                    </textarea>
+                </div>
+
+                <div *ngIf="isApproved && isApproved.data == 'sim'" class="field col-6">
+                    <label style="font-size: 13px; color: rgb(43, 42, 42);"
+                        for="observacoesVistoria">Observações</label>
+                    <textarea class="md:w-40rem w-full" containerStyleClass="w-full" pInputTextarea
+                        id="observacoesVistoria" rows="3" formControlName="observacoesVistoria"
+                        placeholder="Preencha aqui observações sobre o estado do veículo, avarias, etc."
+                        style="height: 38px;" maxlength="1000">
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="container-fluid d-flex justify-content-end p-5 mb-1" style="margin-left:50px ;">
+                    <p-button label="LIMPAR" [text]="true" [raised]="true" class="mx-2" severity="success"
+                        (click)="limparFormulario()">
+                    </p-button>
+                    <p-button label="Finalizar vistoria" type="button" (onClick)="salvarVistoriaSolicitacao()"
+                        severity="success" />
+                </div>
+            </div>
+        </form>
+    </p-card>
+
+    <p-card
+        *ngIf="solicitacaoSelecionada.staEvento === 1 || solicitacaoSelecionada.staEvento === 3 || solicitacaoSelecionada.staEvento === 4">
+        <div style="display: flex; align-items: center; margin-top: 0;">
+            <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; white-space: nowrap;">
+                <strong>Documentos</strong>
+            </h1>
+            <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+            </div>
+        </div>
+        <div style="margin-top: 20px;"
+            *ngIf="solicitacaoSelecionada.staEvento === 1 || solicitacaoSelecionada.staEvento === 3 || solicitacaoSelecionada.staEvento === 4">
+            <button pButton type="button" label="Ordem de serviço" icon="pi pi-download" iconPos="right"
+                class="hover-button"
+                style="color: #28a745; border-color: #28a745; background-color: white; margin: 5px;"
+                (click)="emitirOrdemServico()">
+            </button>
+            <!-- <button pButton type="button" label="Orçamento" icon="pi pi-download" iconPos="right" class="hover-button"
+                style="color: #28a745; border-color: #28a745; background-color: white; margin: 5px;"></button>
+            <button pButton type="button" label="Nota fiscal de produto" icon="pi pi-download" iconPos="right"
+                class="hover-button"
+                style="color: #28a745; border-color: #28a745; background-color: white; margin: 5px;"></button>
+            <button pButton type="button" label="Nota fiscal de serviço" icon="pi pi-download" iconPos="right"
+                class="hover-button"
+                style="color: #28a745; border-color: #28a745; background-color: white; margin: 5px;"></button> -->
+        </div>
+    </p-card>

@@ -1,0 +1,72 @@
+:host ::ng-deep .p-dialog {
+    width: 1100px !important; /* Aumenta a largura do modal */
+    max-width: 95%; /* Garante responsividade */
+    overflow: hidden !important; /* Remove qualquer rolagem */
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+    max-height: none !important; /* Garante que o conteúdo não restrinja altura */
+    overflow: hidden !important; /* Remove rolagem interna */
+    padding: 1.5rem; /* Mantém espaçamento interno */
+    box-sizing: border-box; /* Ajusta o comportamento do padding */
+    margin-top: -28px;
+}
+
+/* Ajuste do campo de Tipo de Manutenção */
+:host ::ng-deep .p-treeSelect {
+    width: 100%; /* Faz o campo ocupar o espaço disponível */
+    max-width: 300px; /* Define um tamanho menor para o campo de seleção */
+    height: 40px; /* Altura uniforme */
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #ffffff;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Ajuste do campo de Serviços (Textarea) */
+:host ::ng-deep textarea.p-inputtextarea {
+    width: 100%; /* Faz o campo ocupar o espaço da coluna */
+    max-width: 700px; /* Aumenta a largura máxima */
+    height: 50px; /* Aumenta a altura */
+    resize: none; /* Remove o redimensionamento manual */
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #ffffff;
+    padding: 0.75rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+
+/* Botões de ação */
+:host ::ng-deep .container-fluid .d-flex {
+    justify-content: flex-end; /* Alinha os botões à direita */
+    gap: 1rem; /* Espaçamento uniforme entre os botões */
+    margin-top: 1rem; /* Distância entre os botões e os campos */
+}
+
+:host ::ng-deep .p-button {
+    min-width: 20px; /* Define um tamanho mínimo para os botões */
+    font-size: 0.875rem; /* Ajusta o tamanho da fonte */
+    padding: 0.5rem 1rem; /* Adiciona espaçamento interno */
+}
+
+.button-hover-effect {
+    transition: transform 0.2s, filter 0.2s; /* Suaviza o efeito ao passar o mouse */
+}
+
+.button-hover-effect:hover {
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho ao passar o mouse */
+    filter: brightness(1.1); /* Realça a cor do botão */
+}
+
+.p-dialog .p-dialog-header {
+    border-bottom: 0 none;
+    background: #ffffff;
+    color: #1c5638;
+    padding: 1.5rem;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+

@@ -1,0 +1,18 @@
+<!-- Container dos Cards Internos -->
+<link rel="manifest" href="manifest.webmanifest">
+
+<div class="welcome-message">
+  <h5>{{ saudacao }}, {{ nomeUsuario }}! O que deseja fazer?</h5>
+</div>
+
+<!-- Container dos Cards Internos -->
+<div class="card-container">
+  <!-- Veículos -->
+  <div class="card-custom">
+    <i class="fa-solid fa-id-card-clip card-icon"></i> <!-- Ícone de Veículos -->
+    <div class="card-title">Clientes</div> <!-- Título abaixo do ícone -->
+    <button class="p-button" (click)="navigateTo('/cliente-listar')">Ver lista de clientes</button>
+    <button class="p-button-outline" (click)="navigateTo('/cliente-criar-novo')">Cadastrar cliente</button>
+  </div>
+
+</div>

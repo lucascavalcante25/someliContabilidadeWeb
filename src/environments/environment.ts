@@ -4,8 +4,11 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080'
+    // apiBaseUrl : 'https://sgf-backend-d-sgf.apps-d.sefaz.ce.gov.br',
+  // apiBaseUrl: '/backend',  
+  apiBaseUrl: 'http://localhost:8080',
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file

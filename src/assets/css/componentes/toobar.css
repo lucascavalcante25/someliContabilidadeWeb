@@ -1,0 +1,22 @@
+@import url('./paleta.css');
+
+.p-toolbar {
+  background: var(--cor-verde-toobar);
+  border: none;
+  padding: 1.25rem;
+  border-radius: 0px;
+  gap: 0.5rem;
+}
+
+.p-toolbar .p-toolbar-group-start .cor-branca .p-button .pi-bars {
+  color: white;
+}
+
+.p-toolbar .p-toolbar-group-start .cor-branca .p-button:focus {
+  box-shadow: none;
+}
+
+.linha-vertical {
+  border-right: 1px solid white;
+  margin-right: 2rem;
+}

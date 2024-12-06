@@ -1,0 +1,17 @@
+@import url('./paleta.css');
+
+.p-sidebar {
+  background: var(--background-sidbar);
+}
+
+.p-sidebar .p-sidebar-header {
+  display: none;
+}
+
+.p-sidebar-left {
+  top: 88px;
+}
+
+.p-sidebar .p-sidebar-content {
+  padding: 0px;
+}

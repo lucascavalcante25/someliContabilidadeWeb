@@ -1,0 +1,124 @@
+<div class="custom-margin">
+    <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+</div>
+
+<p-card class="custom-card-margin">
+    <form [formGroup]="formulario">
+        <div class="d-flex align-items-center mt-0">
+            <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap:nowrap">
+                <strong>1. Identifique o veículo</strong>
+            </h1>
+            <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+            </div>
+        </div>
+        <div class="field col-3" style="display: flex; flex-direction: column;">
+            <label for="orgaoLotacao" style="font-size: 12px; color: rgb(43, 42, 42); margin-bottom: 5px;">Informe a
+                placa*</label>
+            <div style="display: flex; align-items: center; width: 400px;">
+                <p-treeSelect class="md:w-12rem w-full" containerStyleClass="w-full" id="veiculo" [options]="placasTree"
+                    optionLabel="label" optionValue="key" formControlName="placa" placeholder="Selecione uma placa"
+                    selectionMode="single" [filter]="true" (onNodeSelect)="onVeiculoSelected($event)"
+                    filterPlaceholder="Digite para filtrar" style="margin-right: 10px; flex: 1; min-width: 150px;">
+                </p-treeSelect>
+
+                <p-button label="BUSCAR" [outlined]="true" severity="success" type="button"
+                    (click)="consultarPelaPlaca()"
+                    [ngStyle]="{ 'flex-shrink': '0', 'height': '36px', 'width': '100px' }">
+                </p-button>
+
+            </div>
+            <div
+                *ngIf="formulario.get('placa').hasError('required') && (formulario.get('placa').dirty || formulario.get('placa').touched)">
+                <small class="p-error">Campo obrigatório</small>
+            </div>
+        </div>
+    </form>
+
+    <div style="display: flex;">
+        <div *ngIf="veiculo" style="margin-left: 5px; margin-top: 1rem;">
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                <strong>Chassi:</strong> {{ veiculo.chassi }}
+            </p>
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                <strong>Renavam:</strong> {{ veiculo.renavam }}
+            </p>
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                <strong>Marca e Modelo:</strong> {{ veiculo.descricaoMarcaModelo }}
+            </p>
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;">
+                <strong>Cor:</strong> {{ veiculo.descricaoCor }}
+            </p>
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Lotação:</strong> {{
+                veiculo.siglaLotacao}} - {{veiculo.siglaSublotacao}}</p>
+        </div>
+        <div *ngIf="veiculo" style="margin-left: 55px; margin-top: 1rem;">
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Categoria:</strong> {{
+                getCategoriaLabel(veiculo.tipoCategoria)}}</p>
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Tipo:</strong> {{
+                getTipoVeiculoDescricao(veiculo.tipoVeiculo) }}</p>
+            <p class="mb-1-custom text-nowrap" style="font-size: 12px; margin-bottom: 2px;">
+                <strong>Capacidade/Potência/Cilindrada:</strong>
+                {{ veiculo.quantidadePassageiros }} /
+                {{veiculo.potencia }} /
+                {{ veiculo.cilindrada }}
+            </p>
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Tipo de Combustível:</strong> {{
+                getTipoCombustivel(veiculo.tipoCombustivel) }}</p>
+            <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Ano da Fabricação:</strong> {{
+                veiculo.anoFabricacao }}</p>
+        </div>
+    </div>
+</p-card>
+
+<p-card *ngIf="veiculo" class="no-top">
+    <form [formGroup]="formulario">
+        <div class="d-flex align-items-center mt-0">
+            <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap:nowrap">
+                <strong>2. Preencha as informações</strong>
+            </h1>
+            <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+                <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+            </div>
+        </div>
+
+        <div class="p-fluid grid formgrid">
+            <div class="field col-4">
+                <label style="font-size: 13px; color: rgb(43, 42, 42);" for="tipoManutencao">Tipo de manutenção*</label>
+                <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full" id="tipoManutencao"
+                    [options]="treeDataTipoManutencao" optionLabel="label" optionValue="key"
+                    formControlName="tipoManutencao" placeholder="Selecione o tipo de manutenção.">
+                </p-treeSelect>
+                <div
+                    *ngIf="formulario.get('tipoManutencao').hasError('required') && (formulario.get('tipoManutencao').dirty || formulario.get('tipoManutencao').touched)">
+                    <small class="p-error">Campo obrigatório.</small>
+                </div>
+            </div>
+
+            <div class="field col-8">
+                <label style="font-size: 13px; color: rgb(43, 42, 42);" for="servicos">Serviços a serem
+                    executados*</label>
+                <textarea class="md:w-60rem w-full" containerStyleClass="w-full" pInputTextarea
+                    formControlName="servicos">
+                </textarea>
+                <div
+                    *ngIf="formulario.get('servicos').hasError('required') && (formulario.get('servicos').dirty || formulario.get('servicos').touched)">
+                    <small class="p-error">Campo obrigatório.</small>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container-fluid">
+            <div class="container-fluid d-flex justify-content-end p-5 mb-1" style="margin-left:50px ;">
+                <p-button *ngIf="!id" label="LIMPAR" [text]="true" [raised]="true" (click)="resetForm()" class="mx-2"
+                    severity="success" />
+                <p-button label="Cadastrar" type="button" (onClick)="salvarSolicitacao()"
+                    [disabled]="formulario.invalid || !formulario.dirty" severity="success" />
+                <!-- <p-button label="Salvar" type="button" (onClick)="editarSolicitacao()"
+                    [disabled]="formulario.invalid || !formulario.dirty" severity="success" /> -->
+            </div>
+        </div>
+
+    </form>
+</p-card>

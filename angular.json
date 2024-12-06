@@ -3,11 +3,11 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "sakai-ng": {
+        "angular-blank": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
-                    "style": "scss"
+                    "style": "css"
                 }
             },
             "root": "",
@@ -17,22 +17,24 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/sakai-ng",
+                        "outputPath": "dist/",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": [
                             "zone.js"
                         ],
                         "tsConfig": "tsconfig.app.json",
-                        "inlineStyleLanguage": "scss",
+                        "inlineStyleLanguage": "css",
                         "assets": [
                             "src/favicon.ico",
                             "src/assets"
                         ],
                         "styles": [
-                            "src/styles.scss"
+                            "src/styles.css",
+                            "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
                         ],
-                        "scripts": []
+                        "scripts": [
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -56,7 +58,13 @@
                             "vendorChunk": true,
                             "extractLicenses": false,
                             "sourceMap": true,
-                            "namedChunks": true
+                            "namedChunks": true,
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.ts"
+                                }
+                            ]
                         }
                     },
                     "defaultConfiguration": "production"
@@ -65,10 +73,10 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "production": {
-                            "buildTarget": "sakai-ng:build:production"
+                            "buildTarget": "angular-blank:build:production"
                         },
                         "development": {
-                            "buildTarget": "sakai-ng:build:development"
+                            "buildTarget": "angular-blank:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -76,7 +84,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "buildTarget": "sakai-ng:build"
+                        "buildTarget": "angular-blank:build"
                     }
                 },
                 "test": {
@@ -88,13 +96,13 @@
                         ],
                         "tsConfig": "tsconfig.spec.json",
                         "karmaConfig": "karma.conf.js",
-                        "inlineStyleLanguage": "scss",
+                        "inlineStyleLanguage": "css",
                         "assets": [
                             "src/favicon.ico",
                             "src/assets"
                         ],
                         "styles": [
-                            "src/styles.scss"
+                            "src/styles.css"
                         ],
                         "scripts": []
                     }
@@ -103,6 +111,6 @@
         }
     },
     "cli": {
-      "analytics": "4be61bdc-d0b4-45ff-9506-d0df1ab97e76"
+        "analytics": "4e866a30-3212-48f1-9071-1849ed0f376b"
     }
 }
