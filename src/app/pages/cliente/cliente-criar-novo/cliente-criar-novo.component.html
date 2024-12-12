@@ -3,85 +3,52 @@
 </div>
 
 <p-card class="custom-card-margin;">
-  <form [formGroup]="veiculoForm">
+  <form [formGroup]="cnpjForm">
     <div class="d-flex align-items-center mt-0">
-      <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap:nowrap">
-        <strong *ngIf="!id">1. Identifique o novo veículo</strong>
-        <strong *ngIf="id">1. Identificação do veículo</strong>
+      <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap: nowrap;">
+        <strong>1. Pesquise pelo CNPJ</strong>
       </h1>
       <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
         <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
       </div>
     </div>
 
-    <div class="mt-0" *ngIf="!id">
-      <label for="placa" class="form-label" style="font-size: 13px; color: rgb(43, 42, 42);">Placa do veículo*</label>
+    <div class="mt-0">
+      <label for="cnpj" class="form-label" style="font-size: 13px; color: rgb(43, 42, 42);">CNPJ*</label>
       <div style="display: flex; flex-direction: column; align-items: flex-start;">
         <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-          <input type="text" pInputText id="placa" class="form-control input-pequeno mt-1" formControlName="placa"
-            style="width: 300px; margin-right: 10px;" maxlength="7" minlength="7"
-            pattern="^[A-Z]{3}[0-9][A-Z][0-9]{2}$|^[A-Z]{3}[0-9]{4}$" placeholder="Informe uma placa" required
-            (input)="onPlacaInput($event)">
-          <p-button label="BUSCAR" [outlined]="true" severity="success" type="button" (click)="consultarPelaPlaca()" />
+          <input type="text" pInputText id="cnpj" class="form-control input-pequeno mt-1" formControlName="cnpj"
+            style="width: 300px; margin-right: 10px;" maxlength="14" minlength="14"
+            placeholder="Informe o CNPJ" required>
+          <p-button label="BUSCAR" [outlined]="true" severity="success" type="button" (click)="consultarCNPJ()" />
         </div>
 
-        <div *ngIf="veiculoForm.get('placa').touched">
-          <small class="p-error" *ngIf="veiculoForm.get('placa').hasError('required')">
-            O campo placa é obrigatório.
+        <div *ngIf="cnpjForm.get('cnpj').touched">
+          <small class="p-error" *ngIf="cnpjForm.get('cnpj').hasError('required')">
+            O campo CNPJ é obrigatório.
           </small>
-          <small class="p-error"
-            *ngIf="veiculoForm.get('placa').hasError('minlength') || veiculoForm.get('placa').hasError('maxlength')">
-            O campo deve conter exatamente 7 caracteres.
+          <small class="p-error" *ngIf="cnpjForm.get('cnpj').hasError('minlength')">
+            O campo deve conter exatamente 14 caracteres.
           </small>
         </div>
       </div>
     </div>
   </form>
 
-  <div style="display: flex;">
-    <div *ngIf="cliente" style="margin-left: 5px; margin-top: 1rem; margin-right: 65px;">
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Nota fiscal:</strong> {{
-        cliente.notaFiscal?.numero }}</p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Data da compra:</strong> {{
-        cliente.notaFiscal?.dataEmissao | date:'dd/MM/yyyy'}}</p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Valor da compra:</strong> {{
-        cliente.notaFiscal?.valor | currency:'BRL':'symbol':'1.2-2':'pt-BR'}}</p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>CNPJ da revendedora:</strong> {{
-        cliente.notaFiscal?.cnpjEmitente }}</p>
-    </div>
-
-    <div *ngIf="cliente" style="margin-left: 5px; margin-top: 1rem;">
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Placa:</strong> {{ cliente.placa }}
-      </p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Chassi:</strong> {{ cliente.chassi }}
-      </p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Renavam:</strong> {{ cliente.renavam
-        }}</p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Marca e Modelo:</strong> {{
-        cliente.descricaoMarcaModelo }}</p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Cor:</strong> {{ cliente.descricaoCor
-        }}</p>
-    </div>
-
-    <div *ngIf="cliente" style="margin-left: 55px; margin-top: 1rem;">
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Categoria:</strong> {{
-        getCategoriaLabel(cliente.tipoCategoria)}}</p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Tipo:</strong> {{
-        getTipoVeiculoDescricao(cliente.tipoVeiculo) }}</p>
-      <p class="mb-1-custom text-nowrap" style="font-size: 12px; margin-bottom: 2px;">
-        <strong>Capacidade/Potência/Cilindrada:</strong>
-        {{ cliente.quantidadePassageiros }} /
-        {{cliente.potencia }} /
-        {{ cliente.cilindrada }}
-      </p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Tipo de Combustível:</strong> {{
-        getTipoCombustivel(cliente.tipoCombustivel) }}</p>
-      <p class="mb-1-custom" style="font-size: 12px; margin-bottom: 2px;"><strong>Ano da Fabricação:</strong> {{
-        cliente.anoFabricacao }}</p>
-    </div>
+  <div *ngIf="cliente">
+    <p><strong>Status:</strong> {{ cliente.status }}</p>
+    <p><strong>Última Atualização:</strong> {{ cliente.ultimaAtualizacao }}</p>
+    <p><strong>CNPJ:</strong> {{ cliente.cnpj }}</p>
+    <p><strong>Tipo:</strong> {{ cliente.tipo }}</p>
+    <p><strong>Porte:</strong> {{ cliente.porte }}</p>
+    <p><strong>Nome:</strong> {{ cliente.nome }}</p>
+    <p><strong>Fantasia:</strong> {{ cliente.fantasia }}</p>
+    <p><strong>Abertura:</strong> {{ cliente.abertura }}</p>
+    <!-- Exibir mais campos conforme necessário -->
   </div>
 </p-card>
 
+<!-- 
 <p-card *ngIf="cliente" class="no-top mt-4">
   <form [formGroup]="veiculoForm">
     <div class="d-flex align-items-center mt-0">
@@ -226,7 +193,7 @@
       </div>
     </div>
 
-    <!-- Modal de edição da placa -->
+    Modal de edição da placa
     <p-dialog [modal]="true" [(visible)]="visibleEditarPlaca" [style]="{ width: '40rem' }" class="p-dialog-centered"
       [closable]="true" [focusOnShow]="false">
       <div class="flex align-items-center justify-content-center flex-column" style="text-align: center;">
@@ -266,4 +233,4 @@
       </div>
     </p-dialog>
   </form>
-</p-card>
+</p-card> -->

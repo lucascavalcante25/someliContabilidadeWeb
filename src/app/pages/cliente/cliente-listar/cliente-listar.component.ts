@@ -81,7 +81,7 @@ export class ClienteListarComponent {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getListaDeClientes();
+    // this.getListaDeClientes();
     this.carregarOrgaosLocais().subscribe();
     this.carregarSubOrgaosLocais();
   }
@@ -123,27 +123,27 @@ export class ClienteListarComponent {
   }
 
   criarNovoCliente() {
-    this.router.navigate(['/Cliente-criar-novo']);
+    this.router.navigate(['/cliente-criar-novo']);
   }
 
-  getListaDeClientes(): void {
-    this.isLoading = true;
-    this.Clienteservice.getListaDeClientes().subscribe(
-      (res: Cliente[]) => {
-        this.Clientes = res.map(Cliente => ({
-          ...Cliente,
-          codigoTipoCombustivelDescricao: this.getCodigoTipoCombustivelDescricao(Cliente.tipoCombustivel),
-        }));
-        this.ClientesFiltrados = this.Clientes;
-        console.log('Dados recebidos e mapeados:', this.Clientes);
-        this.isLoading = false;
-      },
-      (error: any) => {
-        console.error('Erro ao carregar veículos', error);
-        this.isLoading = false;
-      }
-    );
-  }
+  // getListaDeClientes(): void {
+  //   this.isLoading = true;
+  //   this.Clienteservice.getListaDeClientes().subscribe(
+  //     (res: Cliente[]) => {
+  //       this.Clientes = res.map(Cliente => ({
+  //         ...Cliente,
+  //         codigoTipoCombustivelDescricao: this.getCodigoTipoCombustivelDescricao(Cliente.tipoCombustivel),
+  //       }));
+  //       this.ClientesFiltrados = this.Clientes;
+  //       console.log('Dados recebidos e mapeados:', this.Clientes);
+  //       this.isLoading = false;
+  //     },
+  //     (error: any) => {
+  //       console.error('Erro ao carregar veículos', error);
+  //       this.isLoading = false;
+  //     }
+  //   );
+  // }
 
   getEstadoConservacaoLabel(value: string): string {
     const codigoStr = String(value); 
