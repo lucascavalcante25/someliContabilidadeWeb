@@ -6,7 +6,7 @@
   <form [formGroup]="cnpjForm">
     <div class="d-flex align-items-center mt-0">
       <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap: nowrap;">
-        <strong>1. Pesquise pelo CNPJ</strong>
+        <strong>Pesquise pelo CNPJ</strong>
       </h1>
       <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
         <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
@@ -18,8 +18,8 @@
       <div style="display: flex; flex-direction: column; align-items: flex-start;">
         <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
           <input type="text" pInputText id="cnpj" class="form-control input-pequeno mt-1" formControlName="cnpj"
-            style="width: 300px; margin-right: 10px;" maxlength="14" minlength="14"
-            placeholder="Informe o CNPJ" required>
+            style="width: 300px; margin-right: 10px;" maxlength="14" minlength="14" placeholder="Informe o CNPJ"
+            required>
           <p-button label="BUSCAR" [outlined]="true" severity="success" type="button" (click)="consultarCNPJ()" />
         </div>
 
@@ -35,18 +35,214 @@
     </div>
   </form>
 
-  <div *ngIf="cliente">
-    <p><strong>Status:</strong> {{ cliente.status }}</p>
-    <p><strong>Última Atualização:</strong> {{ cliente.ultimaAtualizacao }}</p>
-    <p><strong>CNPJ:</strong> {{ cliente.cnpj }}</p>
-    <p><strong>Tipo:</strong> {{ cliente.tipo }}</p>
-    <p><strong>Porte:</strong> {{ cliente.porte }}</p>
-    <p><strong>Nome:</strong> {{ cliente.nome }}</p>
-    <p><strong>Fantasia:</strong> {{ cliente.fantasia }}</p>
-    <p><strong>Abertura:</strong> {{ cliente.abertura }}</p>
-    <!-- Exibir mais campos conforme necessário -->
+  <div *ngIf="cliente" class="container">
+    <!-- Dados principais organizados em 6 colunas -->
+    <div class="row">
+      <div class="col-md-2" *ngIf="cliente.status">
+        <strong>Status:</strong> {{ cliente.status }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.ultimaAtualizacao">
+        <strong>Última Atualização:</strong> {{ cliente.ultimaAtualizacao }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.cnpj">
+        <strong>CNPJ:</strong> {{ cliente.cnpj }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.tipo">
+        <strong>Tipo:</strong> {{ cliente.tipo }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.porte">
+        <strong>Porte:</strong> {{ cliente.porte }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.nome">
+        <strong>Nome:</strong> {{ cliente.nome }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.fantasia">
+        <strong>Fantasia:</strong> {{ cliente.fantasia }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.abertura">
+        <strong>Abertura:</strong> {{ cliente.abertura }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.naturezaJuridica">
+        <strong>Natureza Jurídica:</strong> {{ cliente.naturezaJuridica }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.logradouro">
+        <strong>Logradouro:</strong> {{ cliente.logradouro }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.numero">
+        <strong>Número:</strong> {{ cliente.numero }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.complemento">
+        <strong>Complemento:</strong> {{ cliente.complemento }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.cep">
+        <strong>CEP:</strong> {{ cliente.cep }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.bairro">
+        <strong>Bairro:</strong> {{ cliente.bairro }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.municipio">
+        <strong>Município:</strong> {{ cliente.municipio }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.uf">
+        <strong>UF:</strong> {{ cliente.uf }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.email">
+        <strong>Email:</strong> {{ cliente.email }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.telefone">
+        <strong>Telefone:</strong> {{ cliente.telefone }}
+      </div>
+      <div class="col-md-2" *ngIf="cliente.capitalSocial">
+        <strong>Capital Social:</strong> {{ cliente.capitalSocial }}
+      </div>
+    </div>
+
+    <!-- Coluna lateral com dados adicionais -->
+    <div class="row mt-4">
+      <div class="col-md-4">
+        <h4>Atividades Principais</h4>
+        <ul>
+          <li *ngFor="let atividade of cliente.atividadePrincipal">
+            <strong>{{ atividade.codigo }}</strong>: {{ atividade.texto }}
+          </li>
+        </ul>
+
+        <h4>Atividades Secundárias</h4>
+        <ul>
+          <li *ngFor="let atividade of cliente.atividadesSecundarias">
+            <strong>{{ atividade.codigo }}</strong>: {{ atividade.texto }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-4">
+        <h4>Quadro de Sócios e Administradores (QSA)</h4>
+        <ul>
+          <li *ngFor="let socio of cliente.qsa">
+            <strong>{{ socio.nome }}</strong>: {{ socio.qual }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-4">
+        <h4>Simples Nacional</h4>
+        <p *ngIf="cliente.simples?.opcao"><strong>Opção:</strong> {{ cliente.simples.opcao ? 'Sim' : 'Não' }}</p>
+        <p *ngIf="cliente.simples?.dataOpcao"><strong>Data de Opção:</strong> {{ cliente.simples.dataOpcao }}</p>
+        <p *ngIf="cliente.simples?.dataExclusao"><strong>Data de Exclusão:</strong> {{ cliente.simples.dataExclusao }}
+        </p>
+
+        <h4>SIMEI</h4>
+        <p *ngIf="cliente.simei?.opcao"><strong>Opção:</strong> {{ cliente.simei.opcao ? 'Sim' : 'Não' }}</p>
+
+        <h4>Billing</h4>
+        <p *ngIf="cliente.billing?.free"><strong>Free:</strong> {{ cliente.billing.free ? 'Sim' : 'Não' }}</p>
+        <p *ngIf="cliente.billing?.database"><strong>Database:</strong> {{ cliente.billing.database ? 'Sim' : 'Não' }}
+        </p>
+      </div>
+    </div>
   </div>
+
+
 </p-card>
+
+<p-card class="custom-card-margin">
+  <form [formGroup]="sintegraForm">
+    <div class="d-flex align-items-center mt-0">
+      <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap: nowrap;">
+        <strong>Consulta Sintegra</strong>
+      </h1>
+      <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+        <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+      </div>
+    </div>
+
+    <div class="mt-0">
+      <label for="cnpj" class="form-label" style="font-size: 13px; color: rgb(43, 42, 42);">CNPJ*</label>
+      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+          <input type="text" pInputText id="cnpj" class="form-control input-pequeno mt-1" formControlName="cnpj"
+            style="width: 300px; margin-right: 10px;" maxlength="14" minlength="14" placeholder="Informe o CNPJ"
+            required>
+        </div>
+
+        <label for="uf" class="form-label"
+          style="font-size: 13px; color: rgb(43, 42, 42); margin-top: 10px;">UF*</label>
+        <div style="display: flex; align-items: center;">
+          <select formControlName="uf" id="uf" class="form-control" style="width: 150px;">
+            <option value="" disabled selected>Selecione a UF</option>
+            <option *ngFor="let estado of ufs" [value]="estado.sigla">{{ estado.nome }}</option>
+          </select>
+        </div>
+
+        <p-button label="BUSCAR" [outlined]="true" severity="success" type="button" (click)="consultarSintegra()"
+          style="margin-top: 10px;" />
+      </div>
+
+      <div *ngIf="sintegraForm.get('cnpj').touched">
+        <small class="p-error" *ngIf="sintegraForm.get('cnpj').hasError('required')">
+          O campo CNPJ é obrigatório.
+        </small>
+        <small class="p-error" *ngIf="sintegraForm.get('cnpj').hasError('minlength')">
+          O campo deve conter exatamente 14 caracteres.
+        </small>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="sintegraData" class="mt-4">
+    <h3>Resultado da Consulta Sintegra</h3>
+
+    <h4>Dados da Empresa</h4>
+    <p *ngIf="sintegraData.data[0]?.razao_social"><strong>Razão Social:</strong> {{ sintegraData.data[0]?.razao_social
+      }}</p>
+    <p *ngIf="sintegraData.data[0]?.cnpj"><strong>CNPJ:</strong> {{ sintegraData.data[0]?.cnpj }}</p>
+    <p *ngIf="sintegraData.data[0]?.inscricao_estadual"><strong>Inscrição estadual:</strong> {{ sintegraData.data[0]?.inscricao_estadual }}</p>
+
+    <p *ngIf="sintegraData.data[0]?.atividade_economica"><strong>Atividade Econômica:</strong> {{
+      sintegraData.data[0]?.atividade_economica }}</p>
+    <p *ngIf="sintegraData.data[0]?.atividade_economica_secundaria"><strong>Atividade Secundária:</strong> {{
+      sintegraData.data[0]?.atividade_economica_secundaria }}</p>
+
+    <h4>Endereço</h4>
+    <p
+      *ngIf="sintegraData.data[0]?.endereco_logradouro || sintegraData.data[0]?.endereco_numero || sintegraData.data[0]?.endereco_complemento || sintegraData.data[0]?.endereco_bairro || sintegraData.data[0]?.endereco_municipio || sintegraData.data[0]?.endereco_uf">
+      <strong>Endereço:</strong>
+      {{ sintegraData.data[0]?.endereco_logradouro }} {{ sintegraData.data[0]?.endereco_numero }},
+      {{ sintegraData.data[0]?.endereco_complemento }},
+      {{ sintegraData.data[0]?.endereco_bairro }},
+      {{ sintegraData.data[0]?.endereco_municipio }},
+      {{ sintegraData.data[0]?.endereco_uf }},
+      CEP: {{ sintegraData.data[0]?.endereco_cep }}
+    </p>
+
+    <h4>Contato</h4>
+    <p *ngIf="sintegraData.data[0]?.telefone"><strong>Telefone:</strong> {{ sintegraData.data[0]?.telefone }}</p>
+    <p *ngIf="sintegraData.data[0]?.email"><strong>Email:</strong> {{ sintegraData.data[0]?.email }}</p>
+
+    <h4>Situação Cadastral</h4>
+    <p *ngIf="sintegraData.data[0]?.situacao_cadastral"><strong>Situação Cadastral:</strong> {{
+      sintegraData.data[0]?.situacao_cadastral }}</p>
+    <p *ngIf="sintegraData.data[0]?.situacao_cadastral_data"><strong>Data da Situação Cadastral:</strong> {{
+      sintegraData.data[0]?.situacao_cadastral_data }}</p>
+
+    <h4>Informações Financeiras</h4>
+    <p *ngIf="sintegraData.data[0]?.capital_social"><strong>Capital Social:</strong> {{
+      sintegraData.data[0]?.capital_social }}</p>
+
+    <h4>Outras Informações</h4>
+    <p *ngIf="sintegraData.data[0]?.regime_apuracao"><strong>Regime de Apuração:</strong> {{
+      sintegraData.data[0]?.regime_apuracao }}</p>
+    <p *ngIf="sintegraData.data[0]?.abertura_data"><strong>Data de Abertura:</strong> {{
+      sintegraData.data[0]?.abertura_data }}</p>
+    <p *ngIf="sintegraData.data[0]?.site_receipt">
+      <strong>Site de Referência:</strong>
+      <a [href]="sintegraData.data[0]?.site_receipt" target="_blank">Visualizar</a>
+    </p>
+  </div>
+
+
+</p-card>
+
 
 <!-- 
 <p-card *ngIf="cliente" class="no-top mt-4">
