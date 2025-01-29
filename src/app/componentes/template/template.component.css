@@ -13,7 +13,7 @@ mat-sidenav {
   display: flex;
   align-items: left;
   justify-content: center;
-  background-color: #f6f9ed;
+  background-color: #4d0b63;
 }
 
 mat-sidenav-container {
@@ -32,8 +32,8 @@ mat-sidenav-container {
   max-width: 100px;
 }
 
-.secretaria-toolbar-logo {
-  max-width: 330px; /* Aumenta o tamanho máximo da logo */
+.someli-toolbar-logo {
+  max-width: 120px; /* Aumenta o tamanho máximo da logo */
   height: auto; /* Mantém a proporção da imagem */
 }
 

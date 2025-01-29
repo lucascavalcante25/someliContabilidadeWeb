@@ -1,7 +1,7 @@
 @import url('./paleta.css');
 
 .p-sidebar {
-  background: var(--background-sidbar);
+  background: #4d0b63;
 }
 
 .p-sidebar .p-sidebar-header {
@@ -9,7 +9,9 @@
 }
 
 .p-sidebar-left {
-  top: 88px;
+  top: 66px;
+  width: 15rem;
+
 }
 
 .p-sidebar .p-sidebar-content {

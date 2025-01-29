@@ -1,22 +1,21 @@
 @import url('./paleta.css');
 
 .p-toolbar {
-  background: var(--cor-verde-toobar);
+  background: #4d0b63; /* Cinza claro */
+  color: #333; /* Texto escuro */
   border: none;
-  padding: 1.25rem;
-  border-radius: 0px;
+  padding: 0.50rem;
+  border-radius: 0;
   gap: 0.5rem;
 }
 
-.p-toolbar .p-toolbar-group-start .cor-branca .p-button .pi-bars {
+.p-toolbar .p-button {
+  background-color: #4d0b63; /* Verde sutil para botões */
   color: white;
-}
-
-.p-toolbar .p-toolbar-group-start .cor-branca .p-button:focus {
-  box-shadow: none;
+  border: none;
 }
 
 .linha-vertical {
-  border-right: 1px solid white;
+  border-right: 1px solid #ddd; /* Cinza suave */
   margin-right: 2rem;
 }

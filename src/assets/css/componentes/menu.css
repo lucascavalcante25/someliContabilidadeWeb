@@ -14,13 +14,13 @@
 
 .p-panelmenu .p-panelmenu-header .p-panelmenu-header-content {
   border: none;
-  background: var(--background-sidbar);
+  background: #4d0b63;
   border-radius: 0px;
   transition: box-shadow 0.2s;
 }
 
 .p-panelmenu .p-panelmenu-header .p-panelmenu-header-content a {
-  color: var(--cor-verde-toobar);
+  color: var(--cor-branco);
 }
 
 .p-panelmenu .p-panelmenu-content {

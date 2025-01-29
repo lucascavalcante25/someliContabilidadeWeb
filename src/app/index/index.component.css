@@ -7,8 +7,8 @@
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   cursor: pointer;
   margin-bottom: 20px; /* Espaçamento entre os cards */
-  background-color: #F0FAF4;
-  border: 1px solid #4f8669; /* Borda verde fina */
+  background-color: #ffffff;
+  border: 1px solid #4d0b63; /* Borda verde fina */
 }
 
 
@@ -19,7 +19,7 @@
 
 .card-icon {
   font-size: 2.5rem;
-  color: #1c5638; /* Ícones verdes */
+  color: #4d0b63; /* Ícones verdes */
   margin-bottom: 10px;
 }
 
@@ -49,7 +49,7 @@
 .p-button {
   margin: 10px 0;
   width: 100%;
-  background-color: #1c5638;
+  background-color: #4d0b63;
   color: white;
   border: none;
   padding: 10px 0; /* Botão mais slim */
@@ -66,8 +66,8 @@
   margin: 10px 0;
   width: 100%;
   background-color: white;
-  color: #1c5638;
-  border: 2px solid #1c5638;
+  color: #4d0b63;
+  border: 2px solid #4d0b63;
   padding: 10px 0;
   border-radius: 4px;
   font-size: 1rem;
@@ -80,7 +80,7 @@
 
 
 .p-button:hover, .p-button-outline:hover {
-  background-color: #1d7921; /* Leve alteração ao passar o mouse */
+  background-color: #5b0577; /* Leve alteração ao passar o mouse */
   color: white;
 }
 
