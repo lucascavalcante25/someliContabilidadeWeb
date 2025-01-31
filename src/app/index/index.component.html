@@ -9,9 +9,16 @@
 <div class="card-container">
   <!-- Consultas -->
   <div class="card-custom">
-    <i class="fa-solid fa-id-card-clip card-icon"></i> <!-- Ícone de Consultas -->
-    <div class="card-title">Consultas</div> <!-- Título abaixo do ícone -->
+    <i class="fa-solid fa-search card-icon"></i>
+    <div class="card-title">Consulta</div>
     <button class="p-button-outline" (click)="navigateTo('/cliente-consultar-novo')">Consultar cliente</button>
   </div>
 
+  <!-- Clientes -->
+  <div class="card-custom">
+    <i class="fa-solid fa-user card-icon"></i>
+    <div class="card-title">Cliente</div>
+    <button class="p-button" (click)="navigateTo('/cliente-criar-novo')">Adicionar cliente</button>
+    <button class="p-button-outline" (click)="navigateTo('/cliente-listar')">Listar clientes</button>
+  </div>
 </div>

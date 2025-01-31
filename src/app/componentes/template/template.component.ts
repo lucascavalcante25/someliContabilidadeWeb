@@ -47,12 +47,17 @@ export class TemplateComponent implements OnInit, OnDestroy {
   renderizaMenu(): void {
     this.menus = [
       {
+        label: 'Consultas',
+        icon: 'pi pi-search',
+        routerLink: '/cliente-consultar-novo',
+        command: () => this.toggleMenu()
+      },
+      {
         label: 'Clientes',
         icon: 'pi pi-user',
         routerLink: '/cliente-listar',
         command: () => this.toggleMenu()
       },
-      // Adicione mais itens conforme necessário
     ];
   }
 

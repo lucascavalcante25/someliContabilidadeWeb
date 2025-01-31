@@ -30,34 +30,35 @@ export class ClienteConsultarNovoComponent {
   sintegraForm: FormGroup;
   errorMessage: string = '';
   ufs = [
-    { sigla: 'AC', nome: 'Acre' },
-    { sigla: 'AL', nome: 'Alagoas' },
-    { sigla: 'AP', nome: 'Amapá' },
-    { sigla: 'AM', nome: 'Amazonas' },
-    { sigla: 'BA', nome: 'Bahia' },
-    { sigla: 'CE', nome: 'Ceará' },
-    { sigla: 'DF', nome: 'Distrito Federal' },
-    { sigla: 'ES', nome: 'Espírito Santo' },
-    { sigla: 'GO', nome: 'Goiás' },
-    { sigla: 'MA', nome: 'Maranhão' },
-    { sigla: 'MT', nome: 'Mato Grosso' },
-    { sigla: 'MS', nome: 'Mato Grosso do Sul' },
-    { sigla: 'MG', nome: 'Minas Gerais' },
-    { sigla: 'PA', nome: 'Pará' },
-    { sigla: 'PB', nome: 'Paraíba' },
-    { sigla: 'PR', nome: 'Paraná' },
-    { sigla: 'PE', nome: 'Pernambuco' },
-    { sigla: 'PI', nome: 'Piauí' },
-    { sigla: 'RJ', nome: 'Rio de Janeiro' },
-    { sigla: 'RN', nome: 'Rio Grande do Norte' },
-    { sigla: 'RS', nome: 'Rio Grande do Sul' },
-    { sigla: 'RO', nome: 'Rondônia' },
-    { sigla: 'RR', nome: 'Roraima' },
-    { sigla: 'SC', nome: 'Santa Catarina' },
-    { sigla: 'SP', nome: 'São Paulo' },
-    { sigla: 'SE', nome: 'Sergipe' },
-    { sigla: 'TO', nome: 'Tocantins' }
+    { key: 'AC', label: 'Acre' },
+    { key: 'AL', label: 'Alagoas' },
+    { key: 'AP', label: 'Amapá' },
+    { key: 'AM', label: 'Amazonas' },
+    { key: 'BA', label: 'Bahia' },
+    { key: 'CE', label: 'Ceará' },
+    { key: 'DF', label: 'Distrito Federal' },
+    { key: 'ES', label: 'Espírito Santo' },
+    { key: 'GO', label: 'Goiás' },
+    { key: 'MA', label: 'Maranhão' },
+    { key: 'MT', label: 'Mato Grosso' },
+    { key: 'MS', label: 'Mato Grosso do Sul' },
+    { key: 'MG', label: 'Minas Gerais' },
+    { key: 'PA', label: 'Pará' },
+    { key: 'PB', label: 'Paraíba' },
+    { key: 'PR', label: 'Paraná' },
+    { key: 'PE', label: 'Pernambuco' },
+    { key: 'PI', label: 'Piauí' },
+    { key: 'RJ', label: 'Rio de Janeiro' },
+    { key: 'RN', label: 'Rio Grande do Norte' },
+    { key: 'RS', label: 'Rio Grande do Sul' },
+    { key: 'RO', label: 'Rondônia' },
+    { key: 'RR', label: 'Roraima' },
+    { key: 'SC', label: 'Santa Catarina' },
+    { key: 'SP', label: 'São Paulo' },
+    { key: 'SE', label: 'Sergipe' },
+    { key: 'TO', label: 'Tocantins' }
   ];
+
   sintegraData: Sintegra;
 
   constructor(
@@ -127,5 +128,17 @@ export class ClienteConsultarNovoComponent {
       });
     }
   }
+
+  adicionarCliente() {
+    this.router.navigate(['/cliente-criar-novo'], {
+      queryParams: {
+        cnpj: this.cliente.cnpj,
+        nome: this.cliente.nome,
+        telefone: this.cliente.telefone,
+        email: this.cliente.email
+      }
+    });
+  }
+
 
 }

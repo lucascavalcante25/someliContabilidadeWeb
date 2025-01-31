@@ -27,6 +27,7 @@ import { MessageService } from 'primeng/api';
 import { BreadcrumbModule } from './componentes/breadcrumb/breadcrumb.module';
 import { PrimeNgModule } from './componentes/primeng/primeng.module';
 import { KmLMaskDirective } from './core/directives/consumo-directive';
+import { DropdownModule } from 'primeng/dropdown';
 
 // Register locale data
 registerLocaleData(ptBr);
@@ -37,6 +38,7 @@ registerLocaleData(ptBr);
     KmLMaskDirective, // Diretivas personalizadas
   ],
   imports: [
+    DropdownModule, 
     BrowserModule,
     AppRoutingModule, // Configuração de rotas
     TemplateModule, // Módulo do template

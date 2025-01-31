@@ -1,6 +1,6 @@
 .breadcrumb-item {
   font-size: 16px;
-  color: #1C5638 !important;
+  color: #4d0b63 !important;
   font-family: 'Inter', sans-serif;
 }
 
@@ -8,13 +8,13 @@
   background-color: #EBF5F0 !important;
   padding: 1px;
   border-radius: 8px;
-  color: #0ea557;
+  color: rgb(186, 88, 224);
 }
 
 .breadcrumb-item.active {
   font-weight: 700;
-  color: #056132 !important;
-  background-color: #EBF5F0 !important;
+  color: #4d0b63 !important;
+  background-color: #f1dff7 !important;
   padding: 3px 6px;
   border-radius: 8px;
 }
@@ -29,11 +29,11 @@
 }
 
 .breadcrumb-back {
-  background-color: rgba(235, 245, 240, 0.8);
+  background-color: #f1dff7;
   padding: 8px;
   border-radius: 12px;
   display: inline-block;
-  color: #0ea557;
+  color: #4d0b63;
 }
 
 .breadcrumb-back i {
