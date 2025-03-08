@@ -7,16 +7,18 @@
   <div class="container-fluid mb-7 mr-5">
     <div class="container-fluid mb-7 mr-5" style="margin-right: -10px;">
       <div class="flex justify-content-end">
-        <button icon="pi pi-plus" pButton pRipple label="Novo cliente" class="p-button-success"
-          (click)="criarNovoCliente()"></button>
+        <button icon="pi pi-plus" pButton pRipple label="Novo cliente" class="p-button-someli"
+          (click)="criarNovoCliente()">
+        </button>
       </div>
     </div>
+
 
     <div class="container-fluid">
       <div class="header-container d-flex align-items-center mb-4">
         <!-- Título com margem à esquerda para movê-lo para a direita -->
         <div class="titulo" style="margin-left: 10px;">
-          <h1 class="titulo-pagina" style="font-size: 1.5rem; color: rgb(8, 105, 8); margin-right: 10px;">
+          <h1 class="titulo-pagina" style="font-size: 1.5rem; color: #5e2974; margin-right: 10px;">
             <strong>Lista de clientes</strong>
           </h1>
         </div>
@@ -25,7 +27,6 @@
           <i class="pi pi-search" style="position: absolute; left: 10px; top: 65%; transform: translateY(-50%);"></i>
           <input class="input-pesquisar" pInputText type="text" placeholder="Pesquisar" style="padding-left: 30px;"
             [(ngModel)]="pesquisar" (ngModelChange)="filtrarClientes()">
-
         </div>
       </div>
     </div>
@@ -35,167 +36,52 @@
       <p-progressSpinner ariaLabel="loading" [style]="{ width: '50px', height: '50px' }" strokeWidth="4"
         class="green-spinner"></p-progressSpinner>
     </div>
-    
-    <p-table *ngIf="!isLoading"  dataKey="id" [value]="veiculosFiltrados" styleClass="p-datatable-striped custom-table"
-      [tableStyle]="{ 'min-width': '20rem', 'width': '100%' }" [expandedRowKeys]="expandedRows" [paginator]="true"
-      [rows]="10" [rowsPerPageOptions]="[10, 20, 30]">
+
+    <p-table *ngIf="!isLoading" dataKey="id" [value]="ClientesFiltrados" styleClass="p-datatable-striped custom-table"
+      [tableStyle]="{ 'min-width': '20rem', 'width': '100%' }" [paginator]="true" [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 30]">
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 2%;"></th>
-
-          <th pSortableColumn="placa" style="min-width: 110px; font-size: 13px;">Placa <p-sortIcon
-              field="placa"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="descricaoMarcaModelo" style="min-width: 210px; font-size: 13px;">Marca/Modelo <p-sortIcon
-              field="descricaoMarcaModelo"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="tipoVeiculo" style="min-width: 130px; font-size: 13px;">Tipo <p-sortIcon
-              field="tipoVeiculo: number;"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="codigoTipoCombustivelDescricao" style="min-width: 160px; font-size: 13px;">Combustível
-            <p-sortIcon field="codigoTipoCombustivelDescricao"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="anoFabricacao" style="min-width: 100px; font-size: 13px;">Ano <p-sortIcon
-              field="anoFabricacao"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="descricaoCor" style="min-width: 120px; font-size: 13px;">Cor <p-sortIcon
-              field="descricaoCor"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="quantidadePassageiros" style="min-width: 150px; font-size: 13px;">Capacidade
-            <p-sortIcon field="quantidadePassageiros"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="estadoConservacao" style="min-width: 200px; font-size: 13px;">Estado Conservação
-            <p-sortIcon field="estadoConservacao"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="orgaoLotacao" style="min-width: 130px; font-size: 13px;"> Lotação <p-sortIcon
-              field="orgaoLotacao"></p-sortIcon>
-          </th>
-
-          <th pSortableColumn="orgaoSublotacao" style="min-width: 160px; font-size: 13px;"> Sublotação
-            <p-sortIcon field="orgaoSublotacao"></p-sortIcon>
-          </th>
-
+          <th pSortableColumn="nome" style="min-width: 210px; font-size: 13px;">Razão social <p-sortIcon
+              field="nome"></p-sortIcon></th>
+          <th pSortableColumn="cnpj" style="min-width: 160px; font-size: 13px;">CNPJ <p-sortIcon
+              field="cnpj"></p-sortIcon></th>
+          <th pSortableColumn="cnpj" style="min-width: 160px; font-size: 13px;">Proprietário <p-sortIcon
+              field="cnpj"></p-sortIcon></th>
+          <th pSortableColumn="telefone" style="min-width: 130px; font-size: 13px;">Telefone <p-sortIcon
+              field="telefone"></p-sortIcon></th>
+          <th pSortableColumn="email" style="min-width: 200px; font-size: 13px;">Email <p-sortIcon
+              field="email"></p-sortIcon></th>
+          <th pSortableColumn="honorario" style="min-width: 150px; font-size: 13px;">Honorário <p-sortIcon
+              field="honorario"></p-sortIcon></th>
+          <th pSortableColumn="vencimento" style="min-width: 100px; font-size: 13px;">Vencimento <p-sortIcon
+              field="vencimento"></p-sortIcon></th>
+          <th pSortableColumn="pagamento" style="min-width: 130px; font-size: 13px;">Pagamento <p-sortIcon
+              field="pagamento"></p-sortIcon></th>
           <th style="min-width: 120px">Ações</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-cliente let-expanded="expanded">
         <tr>
-          <td>
-            <p-button type="button" pRipple [pRowToggler]="cliente" [text]="true" [rounded]="true" [plain]="true"
-              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" class="expand-icon" />
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.nome }}</td>
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.cnpj }}</td>
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.nomeProprietario }}</td>
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.telefone }}</td>
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.email }}</td>
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.honorario |
+            currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.vencimento }}</td>
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ getLabelPagamento(cliente.pagamento) }}
           </td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.placa }}</td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.descricaoMarcaModelo }}</td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{
-            getDescricaoTipoVeiculo(cliente.tipoVeiculo) }}</td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.codigoTipoCombustivelDescricao }}
-          </td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.anoFabricacao }}</td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.descricaoCor }}</td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.quantidadePassageiros }} lugares
-          </td>
-
-          <td class="table-cell table-cell-large" style="font-size: 12px;">
-            <span class="p-badge p-component"
-              style="backgroundColor: {{cliente.estadoConservacao == 3 ? '#c69606' : cliente.estadoConservacao == 2 ? '#326fd1' :cliente.estadoConservacao == 1 ? '#1C5638' : '#a40d0d' }};">
-              {{ getEstadoConservacaoLabel(cliente.estadoConservacao) }}
-            </span>
-          </td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.siglaLotacao }}</td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.siglaSublotacao }}</td>
-          <!-- <td>
-            <p-button icon="pi pi-pencil" (click)="editVeiculo(cliente)" class="btn-acoes mr-3" />
-          </td> -->
           <td class="table-cell table-cell-large" style="font-size: 20px;">
-            <p-button class="custom-button" (click)="editarVeiculo(cliente.id)">
+            <p-button class="custom-button" (click)="editarCliente(cliente.id)">
               <i class="pi pi-pencil"></i>
             </p-button>
           </td>
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="rowexpansion" let-cliente>
-        <tr>
-          <td colspan="14">
-            <div class="container-fluid" style="margin-left: 30px;">
-              <div class="row mb-4 mt-5" style="margin-right: 600px;">
-
-                <div class="col-md-4 ps-2">
-                  <div class="mb-4">
-                    <strong class="fs-6">Dados de aquisição</strong>
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>N° da nota fiscal:</strong> {{ cliente.notaFiscalId }}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Data da compra:</strong> {{ formatDate(cliente.dataDeCompra) }}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Valor da compra:</strong> {{ cliente.valorCompra | currency:'BRL':'symbol':'1.2-2':'pt-BR'}}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Empresa revendedora:</strong> {{ cliente.empresaRevendedora }}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Tombo:</strong> {{ cliente.tombo }}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Apropriação: </strong> {{ getDescricaoApropriacao(cliente.codApropriacao) }}
-                  </div>
-                </div>
-                <div class="col-md-4 ps-2">
-                  <div class="mb-4">
-                    <strong class="fs-6">Características do veículo</strong>
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Cilindrada:</strong> {{ cliente.cilindrada }}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Potência:</strong> {{ cliente.potencia }}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong> Quilometragem:</strong> {{ cliente.quilometragemInicial | number:'1.0-2'}} KM
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Tanque:</strong> {{ cliente.capacidadeTanque | number:'1.0-2' }} L
-                  </div>
-
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Consumo do fabricante:</strong> {{ cliente.consumoCombustivel }} L
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Sistema de freio:</strong> {{ getSistemaDeFreioLabel(cliente.sistemaFreio) }}
-                  </div>
-                </div>
-
-                <div class="col-md-4 ps-2">
-                  <div class="mb-4">
-                    <strong class="fs-6">Documentação do veículo</strong>
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Chassi:</strong> {{ cliente.chassi }}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Renavam:</strong> {{ cliente.renavam }}
-                  </div>
-                  <div class="d-block mb-2" style="font-size: 12px;">
-                    <strong>Categoria:</strong> {{ getTipoCategoriaLabel(cliente.tipoCategoria) }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
     </p-table>
   </div>
 </p-card>

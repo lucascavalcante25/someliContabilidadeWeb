@@ -72,32 +72,41 @@ dl {
   max-height: none !important;
 }
 
-.p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even){
+.p-datatable.p-datatable-striped .p-datatable-tbody>tr:nth-child(even) {
   background: #ffffff !important
 }
-tfoot, tr {
-  border-color: none !important; /* Remove bordas ao redor */
-  border-style: none !important; /* Remove bordas ao redor */
+
+tfoot,
+tr {
+  border-color: none !important;
+  /* Remove bordas ao redor */
+  border-style: none !important;
+  /* Remove bordas ao redor */
   border-color: #e3dede !important;
 }
 
 tr {
-  border-bottom: double !important; /* Linha horizontal na parte inferior de cada linha */
-  border-width: 1px !important; 
+  border-bottom: double !important;
+  /* Linha horizontal na parte inferior de cada linha */
+  border-width: 1px !important;
   border-color: #e3dede !important;
 }
 
-td, th {
-  border: none !important; /* Remove as bordas verticais entre as células */
+td,
+th {
+  border: none !important;
+  /* Remove as bordas verticais entre as células */
   border-color: #e3dede !important;
 }
 
 thead tr {
-  border-bottom: none !important; /* Remove a linha horizontal no final do cabeçalho */
+  border-bottom: none !important;
+  /* Remove a linha horizontal no final do cabeçalho */
 }
 
 thead th {
-  border: none !important; /* Remove todas as bordas das células do cabeçalho */
+  border: none !important;
+  /* Remove todas as bordas das células do cabeçalho */
 }
 
 .p-toast .p-toast-message.p-toast-message-warn {
@@ -114,8 +123,9 @@ thead th {
   /* border: solid #cc8925;
   border-width: 0 0 0 6px;
   color: #cc8925; */
- 
+
 }
+
 .p-toast .p-toast-message.p-toast-message-info {
   background: #fff;
 }

@@ -37,12 +37,26 @@
 
 .spinner-container {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   height: 100vh;
-  margin-top: -270px; 
+  margin-top: -270px;
 }
 
 :host ::ng-deep .p-progress-spinner-circle {
-    stroke: green !important;
+  stroke: #6A1B9A !important;
+}
+
+.p-button-someli {
+  background-color: #4d0b63 !important;
+  /* Roxo Someli */
+  border-color: #4d0b63 !important;
+  color: #ffffff !important;
+  /* Texto branco */
+}
+
+.p-button-someli:hover {
+  background-color: #7a43be !important;
+  /* Roxo mais escuro no hover */
+  border-color: #7a43be !important;
 }
