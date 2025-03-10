@@ -32,9 +32,11 @@ export class ClienteService {
    * @param uf Unidade Federativa (UF)
    * @returns Observable com os dados do Sintegra
    */
-  consultarSintegra(cnpj: string, uf: string): Observable<Sintegra> {
-    return this.http.post<Sintegra>(`${this.sintegraApiUrl}/consulta`, { cnpj, uf });
+  consultarSintegra(payload: any): Observable<Sintegra> {
+    return this.http.post<Sintegra>(`${this.sintegraApiUrl}/consulta`, payload);
   }
+
+
 
   salvarCliente(cliente: any): Observable<Cliente> {
     return this.http.post<Cliente>(`${this.clienteApiUrl}/salvarCliente`, cliente);

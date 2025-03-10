@@ -3,30 +3,46 @@
 </div>
 
 <p-card class="custom-card-margin;">
+  <p-dialog [(visible)]="isLoadingCnpj" [modal]="true" [closable]="false" showHeader="false"
+    styleClass="custom-loading-dialog">
+    <div class="loading-content">
+      <p-progressSpinner></p-progressSpinner>
+      <p class="loading-text">Buscando CNPJ...</p>
+    </div>
+  </p-dialog>
+
+
+  <p-dialog [(visible)]="isLoadingSintegra" [modal]="true" [closable]="false" showHeader="false"
+    styleClass="custom-loading-dialog">
+    <div class="loading-content">
+      <p-progressSpinner></p-progressSpinner>
+      <p class="loading-text">Consultando Sintegra...</p>
+    </div>
+  </p-dialog>
+
   <form [formGroup]="cnpjForm">
     <div class="d-flex align-items-center mt-0">
-      <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap: nowrap;">
-        <strong>Pesquise pelo CNPJ</strong>
+      <h1 style="color: #5e2974; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap: nowrap;">
+        <strong>Consultar CNPJ</strong>
       </h1>
       <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
         <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
       </div>
     </div>
 
-    <div class="mt-0">
-      <label for="cnpj" class="form-label" style="font-size: 13px; color: rgb(43, 42, 42);">CNPJ*</label>
-      <div style="display: flex; flex-direction: column; align-items: flex-start;">
-        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-          <input type="text" pInputText id="cnpj" class="form-control input-pequeno mt-1" formControlName="cnpj"
-            style="width: 300px; margin-right: 10px;" maxlength="14" minlength="14" placeholder="Informe o CNPJ"
-            required>
-          <p-button label="BUSCAR" [outlined]="true" severity="success" type="button" (click)="consultarCNPJ()" />
-          <p-button *ngIf="cliente" label="Adicionar Cliente" icon="pi pi-plus" severity="primary"
-            style="margin-left: 10px;" (click)="adicionarCliente()" />
+    <div class="row">
+      <div class="col-md-3">
+        <label for="cnpj" class="form-label">CNPJ*</label>
+        <div class="d-flex align-items-center">
+          <input type="text" id="cnpj" class="form-control input-pequeno" pInputText formControlName="cnpj"
+            placeholder="Informe o CNPJ" maxlength="18"
+            (input)="applyCnpjMask($event.target.value, cnpjForm.get('cnpj'))" required />
+
+          <button type="button" class="btn-limpar mx-2" (click)="consultarCNPJ()">Buscar</button>
+          <button *ngIf="cliente" type="button" class="btn-limpar mx-2 btn-outline-danger" (click)="limparCnpjForm()">
+            Limpar
+          </button>
         </div>
-
-        <!-- Exibir o botão "Adicionar Cliente" apenas se os dados forem encontrados -->
-
         <div *ngIf="cnpjForm.get('cnpj').touched">
           <small class="p-error" *ngIf="cnpjForm.get('cnpj').hasError('required')">
             O campo CNPJ é obrigatório.
@@ -36,8 +52,14 @@
           </small>
         </div>
       </div>
+
+      <div class="col-md-3 d-flex align-items-end">
+        <button *ngIf="cliente" type="submit" class="btn-cadastrar" (click)="adicionarCliente()">Adicionar
+          cliente</button>
+      </div>
     </div>
   </form>
+
 
   <div *ngIf="cliente" class="container mt-3" style="margin-left: -12px;">
     <!-- Primeira linha: Informações principais -->
@@ -178,51 +200,60 @@
       </div>
     </div>
   </div>
-
-
-
 </p-card>
 
 <p-card class="custom-card-margin">
   <form [formGroup]="sintegraForm">
     <div class="d-flex align-items-center mt-0">
-      <h1 style="color: #1C5638; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap: nowrap;">
+      <h1 style="color: #5e2974; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap: nowrap;">
         <strong>Consulta Sintegra</strong>
       </h1>
       <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
         <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
       </div>
     </div>
+    <div class="row align-items-end">
+      <!-- Campo CNPJ -->
+      <div class="col-md-2">
+        <label for="cnpjSintegra" class="form-label">CNPJ*</label>
+        <input type="text" id="cnpjSintegra" class="form-control input-pequeno" pInputText formControlName="cnpj"
+          placeholder="Informe o CNPJ" maxlength="18"
+          (input)="applyCnpjMask($event.target.value, sintegraForm.get('cnpj'))" required />
 
-    <div class="mt-0">
-      <!-- CNPJ -->
-      <div style="display: flex; flex-direction: column;">
-        <label for="cnpj" class="form-label" style="font-size: 13px; color: rgb(43, 42, 42);">CNPJ*</label>
-        <input type="text" pInputText id="cnpj" class="form-control input-pequeno mt-1" formControlName="cnpj"
-          style="width: 300px;" maxlength="14" minlength="14" placeholder="Informe o CNPJ" required>
-      </div>
-      <div style="display: flex; align-items: flex-end; gap: 15px; margin-top: 5px;">
-        <div style="display: flex; flex-direction: column;">
-          <label for="uf" class="form-label" style="font-size: 13px; color: rgb(43, 42, 42);">UF*</label>
-          <p-treeSelect [options]="ufs" selectionMode="single" formControlName="uf" placeholder="Selecione a UF"
-            style="width: 300pxpx;">
-          </p-treeSelect>
+        <!-- Validação do CNPJ -->
+        <div *ngIf="sintegraForm.get('cnpj')?.touched">
+          <small class="p-error" *ngIf="sintegraForm.get('cnpj')?.hasError('required')">
+            O campo CNPJ é obrigatório.
+          </small>
+          <small class="p-error" *ngIf="sintegraForm.get('cnpj')?.hasError('minlength')">
+            O campo deve conter exatamente 14 caracteres.
+          </small>
         </div>
-
-        <p-button label="BUSCAR" [outlined]="true" severity="success" type="button" (click)="consultarSintegra()">
-        </p-button>
       </div>
 
-      <!-- UF e Botão Buscar -->
+      <!-- Campo UF -->
+      <div class="col-md-2">
+        <label for="uf" class="form-label">UF*</label>
+        <p-treeSelect [options]="ufs" selectionMode="single" formControlName="uf" placeholder="Selecione a UF"
+          style="width: 100%;">
+        </p-treeSelect>
+      </div>
 
+      <!-- Botão de Buscar -->
+      <div class="col-md-2">
+        <div class="d-flex align-items-center">
 
-      <div *ngIf="sintegraForm.get('cnpj').touched">
-        <small class="p-error" *ngIf="sintegraForm.get('cnpj').hasError('required')">
-          O campo CNPJ é obrigatório.
-        </small>
-        <small class="p-error" *ngIf="sintegraForm.get('cnpj').hasError('minlength')">
-          O campo deve conter exatamente 14 caracteres.
-        </small>
+          <button type="button" class="btn-limpar mx-2" (click)="consultarSintegra()">
+            Buscar
+          </button>
+          <button *ngIf="sintegraData" type="button" class="btn-limpar mx-2 btn-outline-danger"
+            (click)="limparSintegraForm()">
+            Limpar
+          </button>
+        </div>
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+        <strong>Atenção:</strong> {{ errorMessage }}
       </div>
     </div>
   </form>
