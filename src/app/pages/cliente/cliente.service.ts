@@ -17,25 +17,13 @@ export class ClienteService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Consulta detalhes do CNPJ usando o endpoint de consultaCNPJ
-   * @param cnpj Número do CNPJ
-   * @returns Observable com os dados do CNPJ
-   */
   consultarClientePorCNPJ(cnpj: string): Observable<ClienteCNPJ> {
     return this.http.get<ClienteCNPJ>(`${this.cnpjApiUrl}/${cnpj}`);
   }
 
-  /**
-   * Consulta dados no Sintegra usando o endpoint de sintegra/consulta
-   * @param cnpj Número do CNPJ
-   * @param uf Unidade Federativa (UF)
-   * @returns Observable com os dados do Sintegra
-   */
   consultarSintegra(payload: any): Observable<Sintegra> {
     return this.http.post<Sintegra>(`${this.sintegraApiUrl}/consulta`, payload);
   }
-
 
 
   salvarCliente(cliente: any): Observable<Cliente> {
