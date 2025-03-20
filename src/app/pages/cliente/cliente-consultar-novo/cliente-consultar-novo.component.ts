@@ -118,14 +118,15 @@ export class ClienteConsultarNovoComponent {
       }
     );
   }
+
   consultarSintegra(): void {
     let cnpj = this.sintegraForm.get('cnpj')?.value.replace(/\D/g, ''); // Remove máscara
     const uf = this.sintegraForm.get('uf')?.value?.key; // Obtém apenas a sigla da UF
-  
+
     if (!this.isSintegraValid) return;
-  
+
     this.isLoadingSintegra = true; // Ativa spinner 🚀
-  
+
     const payload = {
       uf: uf,
       cnpj: cnpj,
@@ -133,23 +134,23 @@ export class ClienteConsultarNovoComponent {
       ieProdutor: "",
       cpf: ""
     };
-  
+
     console.log("📤 Enviando payload para Sintegra:", payload);
-  
+
     this.clienteService.consultarSintegra(payload).subscribe(
       (data: Sintegra) => {
         console.log('✅ Dados do Sintegra recebidos:', data);
-  
-        if (data.code !== 200) { 
+
+        if (data.code !== 200) {
           // 🔥 Se o backend retornar erro, exibir a mensagem
-          this.errorMessage = data.codeMessage || "Erro ao consultar o Sintegra."; 
+          this.errorMessage = data.codeMessage || "Erro ao consultar o Sintegra.";
           this.sintegraData = null;
         } else {
           // ✅ Se sucesso, limpar erro e mostrar os dados
           this.sintegraData = data;
           this.errorMessage = "";
         }
-  
+
         this.isLoadingSintegra = false; // 🚀 Desativa o spinner
       },
       (error) => {
@@ -159,9 +160,23 @@ export class ClienteConsultarNovoComponent {
       }
     );
   }
-  
-  
-  
+
+  adicionarCliente() {
+    if (!this.cliente) {
+      return;
+    }
+
+    const dadosCliente = {
+      cnpj: this.cliente.cnpj,
+      nome: this.cliente.nome, // Ajuste correto, pois no HTML o campo usa "nome"
+      telefone: this.cliente.telefone || '',
+      email: this.cliente.email || ''
+    };
+
+    this.router.navigate(['/cliente-criar-novo'], { state: { cliente: dadosCliente } });
+  }
+
+
 
   applyCnpjMask(value: string, formControl: AbstractControl | null): string {
     if (!formControl) return value;
@@ -181,4 +196,5 @@ export class ClienteConsultarNovoComponent {
 
     return cnpj;
   }
+  
 }

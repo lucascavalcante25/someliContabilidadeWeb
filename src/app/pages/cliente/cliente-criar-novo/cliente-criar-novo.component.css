@@ -135,3 +135,48 @@
     font-weight: bold;
     margin-top: 10px;
 }
+
+.btn-salvar {
+    background-color: #6a1b9a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-salvar:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-atualizar {
+    background-color: #6a1b9a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-atualizar:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-limpar {
+    background-color: white;
+    color: #6a1b9a;
+    border: 2px solid #6a1b9a;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-limpar:hover {
+    background-color: #6a1b9a;
+    color: white;
+}

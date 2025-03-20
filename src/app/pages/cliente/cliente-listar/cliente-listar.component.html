@@ -65,7 +65,7 @@
       <ng-template pTemplate="body" let-cliente let-expanded="expanded">
         <tr>
           <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.nome }}</td>
-          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.cnpj }}</td>
+          <td class="table-cell table-cell-large" style="font-size: 12px;">{{ formatarCnpj(cliente.cnpj) }}</td>
           <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.nomeProprietario }}</td>
           <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.telefone }}</td>
           <td class="table-cell table-cell-large" style="font-size: 12px;">{{ cliente.email }}</td>
@@ -75,8 +75,12 @@
           <td class="table-cell table-cell-large" style="font-size: 12px;">{{ getLabelPagamento(cliente.pagamento) }}
           </td>
           <td class="table-cell table-cell-large" style="font-size: 20px;">
-            <p-button class="custom-button" (click)="editarCliente(cliente.id)">
-              <i class="pi pi-pencil"></i>
+            <p-button class="custom-button-edit" (click)="editarCliente(cliente.clienteId)">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </p-button>
+
+            <p-button class="custom-button-excluir" (click)="confirmarExclusao(cliente)">
+              <i class="fa-solid fa-trash"></i>
             </p-button>
           </td>
         </tr>
@@ -85,3 +89,18 @@
     </p-table>
   </div>
 </p-card>
+
+<p-dialog [(visible)]="modalExclusaoVisivel" [modal]="true" [closable]="false" header="Confirmar Exclusão">
+  <div class="p-d-flex p-ai-center p-jc-center">
+    <p>Tem certeza que deseja excluir este cliente?</p>
+  </div>
+
+  <div class="p-dialog-footer p-d-flex p-jc-center">
+    <button class="btn-nao" (click)="modalExclusaoVisivel = false">
+      <i class="pi pi-times"></i> NÃO
+    </button>
+    <button class="btn-sim" (click)="excluirCliente()">
+      <i class="pi pi-check"></i> SIM
+    </button>
+  </div>
+</p-dialog>

@@ -17,7 +17,9 @@ const routes: Routes = [
       { path: 'cliente-consultar-novo', component: ClienteConsultarNovoComponent },
 
       { path: 'cliente-criar-novo', component: ClienteCriarNovoComponent },
-
+      
+      { path: 'cliente-criar-novo/:id', component: ClienteCriarNovoComponent },
+      
       { path: 'cliente-listar', component: ClienteListarComponent },
 
 

@@ -13,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
+import { Cliente } from '../cliente-listar/cliente.model';
 
 
 @Component({
@@ -30,7 +31,7 @@ import { DialogModule } from 'primeng/dialog';
     ProgressSpinnerModule, DialogModule],
   templateUrl: './cliente-criar-novo.component.html',
   styleUrl: './cliente-criar-novo.component.css',
-  providers: [MessageService] // ✅ Adicionando MessageService para exibir mensagens
+  providers: [MessageService]
 
 })
 export class ClienteCriarNovoComponent {
@@ -53,12 +54,17 @@ export class ClienteCriarNovoComponent {
     { key: 25, label: '25' },
     { key: 30, label: '30' }
   ];
+  veioDaConsulta: boolean = false;
 
   diaSelecionado: number | null = null;
 
   clienteForm: FormGroup;
-  isFormValid: boolean = false; // Estado inicial do formulário
-  isLoading = false; // Controla a exibição do spinner
+  isFormValid: boolean = false;
+  isLoading = false;
+  isEditing = false;
+  idCliente: number | null = null;
+  formAlterado: boolean = false;
+  dadosOriginais: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -70,8 +76,8 @@ export class ClienteCriarNovoComponent {
   ) {
     this.clienteForm = this.fb.group({
       cnpj: ['', Validators.required],
-      nome: ['', Validators.required],  // Mapeia para "RAZAO_SOCIAL" no backend
-      nomeProprietario: ['', Validators.required], // Novo campo
+      nome: ['', Validators.required],
+      nomeProprietario: ['', Validators.required],
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       honorario: ['', Validators.required],
@@ -79,17 +85,39 @@ export class ClienteCriarNovoComponent {
       pagamento: [null, Validators.required]
     });
   }
-
-
   ngOnInit() {
-    // Garante que o formulário inicie inválido
-    this.isFormValid = this.clienteForm.valid; // Atualiza o estado inicial
+    this.isFormValid = this.clienteForm.valid;
+    this.formAlterado = false; // Garante que inicia desabilitado
 
-    // Monitorar mudanças no formulário
+    const state = history.state;
+    if (state.cliente) {
+      this.veioDaConsulta = true;
+
+      this.clienteForm.patchValue({
+        cnpj: state.cliente.cnpj,
+        nome: state.cliente.nome,
+        telefone: state.cliente.telefone,
+        email: state.cliente.email
+      });
+
+      this.clienteForm.controls['cnpj'].disable();
+      this.clienteForm.controls['nome'].disable();
+    }
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditing = true;
+      this.idCliente = Number(id);
+      this.carregarCliente();
+    }
+
+    // Monitora mudanças nos campos do formulário
     this.clienteForm.valueChanges.subscribe(() => {
-      this.isFormValid = this.clienteForm.valid; // Atualiza o botão dinamicamente
+      this.isFormValid = this.clienteForm.valid;
+      this.verificarAlteracoes(); // Verifica se houve alguma modificação
     });
   }
+
 
 
   limparFormulario(): void {
@@ -142,7 +170,7 @@ export class ClienteCriarNovoComponent {
   }
 
   telefoneValidator(control: FormControl) {
-    const value = control.value?.replace(/\D/g, ''); // Remove tudo que não for número
+    const value = control.value?.replace(/\D/g, '');
     if (!value || value.length < 10 || value.length > 11) {
       return { telefoneInvalido: true };
     }
@@ -174,36 +202,97 @@ export class ClienteCriarNovoComponent {
   }
 
 
-  salvarCliente() {
-    if (this.clienteForm.invalid) {
-      return;
-    }
+  carregarCliente() {
+    if (!this.idCliente) return;
 
-    this.isLoading = true; // 🔄 Exibe o spinner antes do envio
+    this.isLoading = true;
+    this.clienteService.getClientePorId(this.idCliente).subscribe({
+      next: (cliente) => {
+        const vencimentoSelecionado = this.diasVencimento.find(d => d.key === cliente.vencimento) || null;
+        const pagamentoSelecionado = this.tiposPagamento.find(p => p.key === cliente.pagamento) || null;
 
-    const cliente = {
-      nome: this.clienteForm.value.nome,
-      nomeProprietario: this.clienteForm.value.nomeProprietario,
-      cnpj: this.clienteForm.value.cnpj.replace(/\D/g, ''), // Remove pontuação
-      telefone: this.clienteForm.value.telefone,
-      email: this.clienteForm.value.email,
-      honorario: parseFloat(this.clienteForm.value.honorario.replace('R$', '').replace(',', '.')),
-      vencimento: Number(this.clienteForm.value.vencimento?.key || this.clienteForm.value.vencimento),
-      pagamento: Number(this.clienteForm.value.pagamento?.key || this.clienteForm.value.pagamento)
-    };
+        this.clienteForm.patchValue({
+          nome: cliente.nome,
+          nomeProprietario: cliente.nomeProprietario,
+          cnpj: this.applyCnpjMask(cliente.cnpj), // Aplica a máscara antes de preencher
+          telefone: this.applyPhoneMask(cliente.telefone), // Aplica a máscara antes de preencher
+          email: cliente.email,
+          honorario: cliente.honorario,
+          vencimento: vencimentoSelecionado,
+          pagamento: pagamentoSelecionado
+        });
 
-    this.clienteService.salvarCliente(cliente).subscribe({
-      next: (response) => {
-        this.isLoading = false; // ✅ Remove o spinner
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Cliente cadastrado com sucesso!' });
-        setTimeout(() => this.router.navigate(['/cliente-listar']), 2000); // 🔄 Aguarda 2s antes de redirecionar
+        this.isLoading = false;
       },
-      error: (err) => {
-        this.isLoading = false; // ✅ Remove o spinner em caso de erro
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao salvar o cliente!' });
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar cliente.' });
+        this.isLoading = false;
       }
     });
   }
 
 
-}
+  verificarAlteracoes() {
+    // Converte os objetos para strings JSON para fazer a comparação
+    const valoresAtuais = JSON.stringify(this.clienteForm.getRawValue());
+    const valoresOriginais = JSON.stringify(this.dadosOriginais);
+
+    this.formAlterado = valoresAtuais !== valoresOriginais;
+  }
+
+  salvarCliente() {
+    if (this.clienteForm.invalid) {
+      return;
+    }
+
+    this.isLoading = true; // Exibe o spinner antes do envio
+
+    // Captura TODOS os valores do formulário, incluindo os desabilitados
+    const formValues = this.clienteForm.getRawValue();
+
+    const cliente: Cliente = {
+      clienteId: this.idCliente || 0, // Usa clienteId conforme a interface
+      cnpj: this.clienteForm.getRawValue().cnpj || '',
+      nome: this.clienteForm.getRawValue().nome || '',
+      nomeProprietario: this.clienteForm.getRawValue().nomeProprietario || '',
+      telefone: this.clienteForm.getRawValue().telefone || '',
+      email: this.clienteForm.getRawValue().email || '',
+      honorario: parseFloat(
+        String(this.clienteForm.getRawValue().honorario || '0')
+          .replace(/[^\d,]/g, '') // Remove tudo que não seja número ou vírgula
+          .replace(',', '.') // Substitui vírgula por ponto para formato decimal
+      ),
+            vencimento: Number(this.clienteForm.getRawValue().vencimento?.key || this.clienteForm.getRawValue().vencimento || 0),
+      pagamento: Number(this.clienteForm.getRawValue().pagamento?.key || this.clienteForm.getRawValue().pagamento || 0)
+    };
+
+    console.log('Enviando para o backend:', cliente); // Verifica se os valores estão corretos no console
+
+    if (this.isEditing) {
+      this.clienteService.atualizarCliente(cliente).subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Cliente atualizado com sucesso!' });
+          setTimeout(() => this.router.navigate(['/cliente-listar']), 2000);
+        },
+        error: () => {
+          this.isLoading = false;
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao atualizar o cliente!' });
+        }
+      });
+    } else {
+      this.clienteService.salvarCliente(cliente).subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Cliente cadastrado com sucesso!' });
+          setTimeout(() => this.router.navigate(['/cliente-listar']), 2000);
+        },
+        error: () => {
+          this.isLoading = false;
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao salvar o cliente!' });
+        }
+      });
+    }
+  }
+
+}  

@@ -34,5 +34,17 @@ export class ClienteService {
     return this.http.get<Cliente[]>(`${this.clienteApiUrl}/listarClientes`);
   }
 
+  getClientePorId(id: number): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.clienteApiUrl}/buscarPorId/${id}`);
+  }
+
+  atualizarCliente(cliente: Cliente): Observable<Cliente> {
+    return this.http.put<Cliente>(`${this.clienteApiUrl}/atualizarCliente/${cliente.clienteId}`, cliente);
+  }
+
+  excluirCliente(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.clienteApiUrl}/excluirCliente/${id}`);
+  }
+
 }
 

@@ -25,12 +25,13 @@
             <div class="col-md-3">
                 <label class="form-label" for="cnpj">CNPJ da empresa</label>
                 <input type="text" class="form-control input-pequeno" pInputText formControlName="cnpj"
-                    placeholder="Digite o CNPJ" maxlength="18" (input)="applyCnpjMask($event.target.value)" />
+                    placeholder="Digite o CNPJ" maxlength="18" (input)="applyCnpjMask($event.target.value)"
+                    [disabled]="veioDaConsulta" />
             </div>
             <div class="col-md-3">
                 <label for="razaoSocial" class="form-label">Razão Social</label>
                 <input id="razaoSocial" pInputText type="text" class="form-control input-pequeno" formControlName="nome"
-                    placeholder="Digite a razão social" />
+                    placeholder="Digite a razão social" [disabled]="veioDaConsulta" />
             </div>
             <div class="col-md-3">
                 <label for="nomeProprietario" class="form-label">Nome do proprietário</label>
@@ -81,8 +82,20 @@
         <!-- Botões -->
         <div class="d-flex justify-content-left mt-4">
             <button type="button" class="btn-limpar mx-2" (click)="limparFormulario()">Limpar</button>
-            <button type="submit" class="btn-cadastrar" [disabled]="clienteForm.invalid">Cadastrar</button>
+
+            <!-- Botão para cadastrar novo cliente -->
+            <button *ngIf="!isEditing" type="submit" [disabled]="!formAlterado" class="btn-salvar mx-2">
+                Cadastrar Cliente
+            </button>
+
+            <!-- Botão para atualizar cliente existente -->
+            <button *ngIf="isEditing" type="submit" [disabled]="!formAlterado" class="btn-atualizar mx-2">
+                Atualizar Cliente
+            </button>
         </div>
+
+
+
     </form>
 </p-card>
 

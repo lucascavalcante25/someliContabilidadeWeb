@@ -45,6 +45,8 @@ export class ClienteListarComponent {
 
   first: number = 0;
   rows: number = 10;
+  modalExclusaoVisivel = false;
+  clienteSelecionado!: Cliente; // Variável para armazenar o cliente que será excluído
 
   tiposPagamento = [
     { key: 1, label: 'Física' },
@@ -71,11 +73,11 @@ export class ClienteListarComponent {
   }
 
   toggleRow(row: Cliente): void {
-    if (this.expandedRows[row.id]) {
-      delete this.expandedRows[row.id];
+    if (this.expandedRows[row.clienteId]) {
+      delete this.expandedRows[row.clienteId];
     } else {
       this.expandedRows = {};
-      this.expandedRows[row.id] = true;
+      this.expandedRows[row.clienteId] = true;
     }
   }
 
@@ -94,7 +96,9 @@ export class ClienteListarComponent {
           if (res && res.length > 0) {
             this.Clientes = res;
             this.ClientesFiltrados = [...this.Clientes];
-            console.log('Clientes carregados', this.Clientes);
+
+            // Verifica se os IDs estão carregando corretamente
+            console.log("Clientes carregados:", this.Clientes);
           } else {
             this.Clientes = [];
             this.ClientesFiltrados = [];
@@ -117,6 +121,7 @@ export class ClienteListarComponent {
         }
       });
   }
+
   filtrarClientes() {
     const pesquisa = this.pesquisar.toLowerCase();
 
@@ -140,13 +145,54 @@ export class ClienteListarComponent {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
-  editarCliente(id: number) {
-    this.router.navigate(['/cliente-editar/' + id]);
-  }
-
   getLabelPagamento(codigo: number): string {
     const tipo = this.tiposPagamento.find(tp => tp.key === codigo);
     return tipo ? tipo.label : 'Desconhecido'; // Retorna a label ou 'Desconhecido' se não encontrar
   }
+
+  formatarCnpj(cnpj: string): string {
+    if (!cnpj) {
+      return '';
+    }
+
+    const cnpjLimpo = cnpj.replace(/\D/g, '');
+    return cnpjLimpo.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+  }
+
+  editarCliente(id: number | undefined) {
+    if (!id) {
+      console.error("Erro: ID do cliente está indefinido!");
+      return;
+    }
+
+    this.router.navigate(['/cliente-criar-novo', id]);
+  }
+
+
+  // Função para abrir o modal de confirmação
+  confirmarExclusao(cliente: Cliente) {
+    this.clienteSelecionado = cliente;
+    this.modalExclusaoVisivel = true;
+  }
+
+  // Função para excluir o cliente
+  excluirCliente() {
+    if (!this.clienteSelecionado || !this.clienteSelecionado.clienteId) return;
+
+    this.clienteService.excluirCliente(this.clienteSelecionado.clienteId).subscribe({
+      next: () => {
+        this.modalExclusaoVisivel = false;
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Cliente excluído com sucesso!' });
+        this.getListaDeClientes(); // Atualiza a lista
+      },
+      error: () => {
+        this.modalExclusaoVisivel = false;
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao excluir cliente!' });
+      }
+    });
+  }
+
+
+
 
 }
