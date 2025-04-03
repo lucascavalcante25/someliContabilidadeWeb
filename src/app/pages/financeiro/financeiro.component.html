@@ -1,0 +1,63 @@
+<div class="p-4 space-y-4">
+
+    <!-- Título -->
+    <h2 class="text-3xl font-bold text-purple-900 mb-4">Financeiro - Someli Contabilidade</h2>
+  
+    <!-- DASHBOARD -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="bg-white shadow rounded-lg p-4 text-center">
+        <div class="text-gray-500 text-sm">Clientes Ativos</div>
+        <div class="text-3xl font-bold text-gray-800 mt-1">{{ totalClientes }}</div>
+      </div>
+  
+      <div class="bg-white shadow rounded-lg p-4 text-center">
+        <div class="text-gray-500 text-sm">Pagamentos Recebidos</div>
+        <div class="text-3xl font-bold text-green-600 mt-1">R$ {{ totalRecebido | number:'1.2-2' }}</div>
+      </div>
+  
+      <div class="bg-white shadow rounded-lg p-4 text-center">
+        <div class="text-gray-500 text-sm">Pagamentos Pendentes</div>
+        <div class="text-3xl font-bold text-red-600 mt-1">R$ {{ totalPendente | number:'1.2-2' }}</div>
+      </div>
+  
+      <div class="bg-white shadow rounded-lg p-4 text-center">
+        <div class="text-gray-500 text-sm">% Adimplência</div>
+        <div class="text-3xl font-bold text-blue-700 mt-1">{{ percentualAdimplencia }}%</div>
+      </div>
+    </div>
+  
+    <!-- ABAS MÊS -->
+    <p-tabView [(activeIndex)]="mesSelecionado" class="mt-6">
+      <p-tabPanel *ngFor="let mes of meses; let i = index" [header]="mes.label">
+  
+        <!-- TABELA CLIENTES -->
+        <p-table [value]="clientesPorMes[i]" [responsiveLayout]="'scroll'" class="p-datatable-sm" styleClass="p-datatable-gridlines">
+  
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Cliente</th>
+              <th>Ordem</th>
+              <th>Vencimento</th>
+              <th>Honorário</th>
+              <th class="text-center">Pago?</th>
+            </tr>
+          </ng-template>
+  
+          <ng-template pTemplate="body" let-cliente>
+            <tr>
+              <td>{{ cliente.nome }}</td>
+              <td>{{ cliente.pagamento }}</td>
+              <td>{{ cliente.vencimento }}</td>
+              <td>R$ {{ cliente.honorario | number:'1.2-2' }}</td>
+              <td class="text-center">
+                <p-checkbox [(ngModel)]="cliente.pago" binary="true" (onChange)="atualizarPagamento(cliente, i)"></p-checkbox>
+              </td>
+            </tr>
+          </ng-template>
+  
+        </p-table>
+  
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+  

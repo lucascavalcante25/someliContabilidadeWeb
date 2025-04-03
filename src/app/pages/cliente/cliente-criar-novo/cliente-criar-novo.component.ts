@@ -54,10 +54,10 @@ export class ClienteCriarNovoComponent {
     { key: 25, label: '25' },
     { key: 30, label: '30' }
   ];
-  veioDaConsulta: boolean = false;
-
   diaSelecionado: number | null = null;
-
+  
+  veioDaConsulta: boolean = false;
+  
   clienteForm: FormGroup;
   isFormValid: boolean = false;
   isLoading = false;
@@ -217,7 +217,7 @@ export class ClienteCriarNovoComponent {
           cnpj: this.applyCnpjMask(cliente.cnpj), // Aplica a máscara antes de preencher
           telefone: this.applyPhoneMask(cliente.telefone), // Aplica a máscara antes de preencher
           email: cliente.email,
-          honorario: cliente.honorario,
+          honorario: this.applyCurrencyMask(cliente.honorario.toString()), // Converte para string antes de preencher
           vencimento: vencimentoSelecionado,
           pagamento: pagamentoSelecionado
         });
