@@ -1,7 +1,8 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
+import { MenuItem, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
@@ -21,7 +22,9 @@ export class TemplateComponent implements OnInit, OnDestroy {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private formBuilder: FormBuilder,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private router: Router,
+    private messageService: MessageService
   ) {
     this.options = this.formBuilder.group({
       bottom: 0,
@@ -48,14 +51,27 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.menus = [
       {
         label: 'Consultas',
-        icon: 'pi pi-search',
+        icon: 'fa fa-search',
         routerLink: '/cliente-consultar-novo',
         command: () => this.toggleMenu()
       },
       {
         label: 'Clientes',
-        icon: 'pi pi-user',
+        icon: 'fa fa-user',
         routerLink: '/cliente-listar',
+        command: () => this.toggleMenu()
+      },
+      {
+        label: 'Financeiro',
+        icon: 'fa fa-money-bill',
+        routerLink: '/financeiro',
+        command: () => this.toggleMenu()
+      },
+
+      {
+        label: 'Usuarios',
+        icon: 'fa fa-user-shield',
+        routerLink: '/usuario-listar',
         command: () => this.toggleMenu()
       },
     ];
@@ -83,6 +99,29 @@ export class TemplateComponent implements OnInit, OnDestroy {
   get sidenavMode(): string {
     return this.isSmallScreen ? 'over' : 'side';
   }
+
+  logout() {
+    localStorage.removeItem('token');
+
+    // opcional: mensagem de saída
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Logout',
+      detail: 'Você saiu do sistema.'
+    });
+
+    this.router.navigate(['/login']);
+  }
+  estaLogado(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+
+  mostrarToolbar(): boolean {
+    // oculta a barra quando estiver na página de login
+    return !this.router.url.includes('/login');
+  }
+
 
   /**
    * Abre um diálogo (exemplo, se necessário).

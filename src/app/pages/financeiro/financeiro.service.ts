@@ -15,31 +15,27 @@ export interface ClienteFinanceiro {
     providedIn: 'root'
 })
 export class FinanceiroService {
-
     private baseUrl = `${environment.apiBaseUrl}/api/financeiro`;
 
     constructor(private http: HttpClient) { }
 
-    listarClientesAtivos() {
-        return this.http.get<ClienteFinanceiro[]>(`${this.baseUrl}/clientes`);
+    buscarClientesAtivos() {
+        return this.http.get<ClienteFinanceiro[]>(`${this.baseUrl}/clientes/ativos`);
     }
 
-    salvarPagamentos(pagamentos: any[]) {
-        return this.http.post('/api/financeiro/pagamentos', pagamentos);
-      }
-      
-
-    listarPagamentosPorMesEAno(mes: string, ano: number) {
-        return this.http.get<any[]>(`${this.baseUrl}/pagamentos/${mes}/${ano}`);
-    }
-
-
-    listarClientesComPagamentos(mes: string, ano: number) {
-        return this.http.get<any[]>(`${this.baseUrl}/clientes-com-pagamento`, {
+    buscarClientesFinanceiros(mes: string, ano: number) {
+        return this.http.get<ClienteFinanceiro[]>(`${this.baseUrl}/clientes/financeiro`, {
             params: { mes, ano }
         });
     }
 
-
-
+    atualizarPagamentoCliente(clienteId: number, pago: boolean, mes: string, ano: number) {
+        return this.http.put(`${this.baseUrl}/pagamentos/status`, pago, {
+            params: {
+                clienteId: clienteId,
+                mes: mes,
+                ano: ano
+            }
+        });
+    }
 }

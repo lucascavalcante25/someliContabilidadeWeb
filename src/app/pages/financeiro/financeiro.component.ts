@@ -54,11 +54,20 @@ export class FinanceiroComponent implements OnInit {
     { label: 'Dez', key: 'DEZ' },
   ];
 
+  filtroNome: string = '';
+  filtroStatus: string = '';
+
+  statusOptions = [
+    { label: 'Todos', value: '' },
+    { label: 'Pagos', value: 'pago' },
+    { label: 'Pendentes', value: 'pendente' }
+  ];
+
+
   mesSelecionado = new Date().getMonth();
 
   clientesPorMes: any[][] = [];
 
-  // Dashboard
   totalClientes = 0;
   totalRecebido = 0;
   totalPendente = 0;
@@ -70,38 +79,44 @@ export class FinanceiroComponent implements OnInit {
   }
 
   buscarClientesDoBackend() {
-    this.financeiroService.listarClientesAtivos().subscribe(clientes => {
-      // clona os dados para todos os meses com "pago = false"
-      this.clientesPorMes = this.meses.map(() =>
-        clientes.map(c => ({ ...c, pago: false }))
-      );
-      this.atualizarDashboard();
+    const anoAtual = new Date().getFullYear();
+    this.meses.forEach((mes, i) => {
+      this.financeiroService.buscarClientesFinanceiros(mes.key, anoAtual).subscribe(clientes => {
+        this.clientesPorMes[i] = clientes;
+        if (i === this.mesSelecionado) {
+          this.atualizarDashboard();
+        }
+      });
     });
   }
 
-  salvarPagamentos() {
-    const anoAtual = new Date().getFullYear();
-    const mesSelecionado = this.meses[this.mesSelecionado].key;
-
-    const pagamentos = this.clientesPorMes[this.mesSelecionado].map(cliente => ({
-      clienteId: cliente.clienteId,
-      mes: mesSelecionado,
-      ano: anoAtual,
-      pago: cliente.pago
-    }));
-
-    this.financeiroService.salvarPagamentos(pagamentos).subscribe({
-      next: () => this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Pagamentos salvos!' }),
-      error: () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao salvar os pagamentos.' })
+  filtrarClientes(lista: any[]): any[] {
+    return lista.filter(cliente => {
+      const nomeCondicao = !this.filtroNome || cliente.nome.toLowerCase().includes(this.filtroNome.toLowerCase());
+      const statusCondicao =
+        !this.filtroStatus ||
+        (this.filtroStatus === 'pago' && cliente.pago) ||
+        (this.filtroStatus === 'pendente' && !cliente.pago);
+      return nomeCondicao && statusCondicao;
     });
   }
 
 
 
   atualizarPagamento(cliente: any, indiceMes: number) {
-    console.log(`Cliente ${cliente.nome} marcado como ${cliente.pago ? 'pago' : 'não pago'} no mês ${this.meses[indiceMes].key}`);
-    this.atualizarDashboard();
+    const mes = this.meses[indiceMes].key;
+    const ano = new Date().getFullYear();
+
+    this.financeiroService.atualizarPagamentoCliente(cliente.clienteId, cliente.pago, mes, ano).subscribe({
+      next: () => this.atualizarDashboard(),
+      error: err => {
+        console.error('Erro ao salvar pagamento:', err);
+        cliente.pago = !cliente.pago;
+      }
+    });
   }
+
+
 
   atualizarDashboard() {
     const mesAtual = this.clientesPorMes[this.mesSelecionado];

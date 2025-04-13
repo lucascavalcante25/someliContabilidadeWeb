@@ -29,6 +29,9 @@ import { PrimeNgModule } from './componentes/primeng/primeng.module';
 import { KmLMaskDirective } from './core/directives/consumo-directive';
 import { DropdownModule } from 'primeng/dropdown';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+
 // Register locale data
 registerLocaleData(ptBr);
 
@@ -53,10 +56,16 @@ registerLocaleData(ptBr);
     CardModule,
     DynamicDialogModule,
     DialogModule,
+    AppRoutingModule
   ],
   providers: [
     DialogService,
-    MessageService, // Serviços do PrimeNG
+    MessageService, 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
 })
