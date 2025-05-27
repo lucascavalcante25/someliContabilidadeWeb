@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export interface ClienteFinanceiro {
@@ -36,6 +37,19 @@ export class FinanceiroService {
                 mes: mes,
                 ano: ano
             }
+        });
+
+    }
+    
+    buscarDespesasPorMes(mes: string, ano: number): Observable<any[]> {
+        return this.http.get<any[]>(`${this.baseUrl}/despesas/financeiro`, {
+            params: { mes, ano }
+        });
+    }
+
+    atualizarStatusDespesa(despesaId: number, paga: boolean): Observable<void> {
+        return this.http.put<void>(`${this.baseUrl}/despesas/status`, paga, {
+            params: { despesaId, paga }
         });
     }
 }

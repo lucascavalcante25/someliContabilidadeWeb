@@ -34,9 +34,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UsuarioCriarNovoComponent {
   breadcrumbs: any = [
-    { label: 'Início', url: '#' },
+    { label: 'Início', url: '/index' },
     { label: 'Lista de usuários', url: '/usuario-listar' },
-    { label: 'Novo usuário', url: 'javascript:void(0)' }
+    { label: 'Novo usuário', url: '/usuario-criar-novo' }
   ];
   usuarioForm!: FormGroup;
   perfis = [

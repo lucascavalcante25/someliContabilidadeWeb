@@ -30,7 +30,7 @@ import { ToastModule } from 'primeng/toast';
   styleUrls: ['./cliente-consultar-novo.component.css']
 })
 export class ClienteConsultarNovoComponent {
-  breadcrumbs: any = [{ "label": "Início", "url": "#" }, { "label": "Nova consulta", "url": "javascript:void(0)" }];
+  breadcrumbs: any = [{ "label": "Início", "url": "/index" }, { "label": "Nova consulta", "url": "javascript:void(0)" }];
   cnpjForm: FormGroup;
   sintegraForm: FormGroup;
   cliente?: ClienteCNPJ;

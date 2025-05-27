@@ -33,7 +33,10 @@ export class ClienteListarComponent {
   @ViewChild(PaginatorModule) paginator: PaginatorModule;
   @Input() TITULO = 'Lista de clientes';
   @Input() veiculoData: Cliente[] = [];
-  breadcrumbs: any = [{ "label": "Início", "url": "#" }, { "label": "Lista de clientes", "url": "#/cliente-listar" }];
+  breadcrumbs: any = [
+    { label: 'Início', url: '/index' },
+    { label: 'Lista de clientes', url: '/cliente-listar' }
+  ];
   Clientes: Cliente[] = [];
   totalElements: number = 0;
   pageSize: number = 5;

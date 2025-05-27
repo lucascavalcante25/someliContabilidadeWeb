@@ -1,0 +1,87 @@
+<div class="custom-margin">
+  <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+</div>
+
+<p-card class="custom-card-margin">
+  <p-dialog [(visible)]="isLoading" [modal]="true" [closable]="false" showHeader="false"
+    styleClass="custom-loading-dialog">
+    <div class="loading-content">
+      <p-progressSpinner></p-progressSpinner>
+      <p class="loading-text">Processando...</p>
+    </div>
+  </p-dialog>
+
+  <form [formGroup]="formulario" (ngSubmit)="salvarDespesa()">
+    <div class="d-flex align-items-center mt-0">
+      <h1 style="color: #5e2974; font-size: 18px; margin-top: -50px; margin-left: -5px; text-wrap: nowrap;">
+        <strong>{{ idDespesa ? 'Edição de Despesa' : 'Cadastro de Despesa' }}</strong>
+      </h1>
+
+      <div class="flex-grow-1 mx-5" style="position: relative; top: -30px; margin-left: 60px;width: 100%;">
+        <hr class="divider container-fluid" style="width: 100%; margin-left: 2px; margin-right: 40px;">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <label class="form-label" for="descricao">Descrição</label>
+        <input type="text" id="descricao" class="form-control input-pequeno" pInputText formControlName="descricao"
+          placeholder="Ex: Sistema Fortes ou Compra de Ar" />
+      </div>
+
+      <div class="col-md-2" style="width: 208px;">
+        <label class="form-label" for="valorMensal">Valor Mensal</label>
+        <p-inputNumber inputId="valorMensal" formControlName="valorMensal" mode="currency" currency="BRL" locale="pt-BR"
+          placeholder="R$ 0,00" class="w-full input-pequeno">
+        </p-inputNumber>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label" for="tipo">Tipo</label>
+        <p-treeSelect id="tipo" class="w-full input-pequeno" containerStyleClass="w-full" [options]="tiposDespesa"
+          formControlName="tipo" optionLabel="label" optionValue="key" placeholder="Selecione o tipo"
+          [selectionMode]="'single'">
+        </p-treeSelect>
+      </div>
+
+      <div class="col-md-2" *ngIf="(formulario.get('tipo')?.value?.key ?? formulario.get('tipo')?.value) === 3">
+        <label class="form-label" for="diaPagamento">Dia de Pagamento</label>
+        <p-treeSelect id="diaPagamento" class="w-full input-pequeno" [options]="diasVencimento"
+          formControlName="diaPagamento" optionLabel="label" optionValue="key"
+          placeholder="Selecione o dia de pagamento">
+        </p-treeSelect>
+      </div>
+
+
+
+      <div class="col-md-2" *ngIf="(formulario.get('tipo')?.value?.key || formulario.get('tipo')?.value) === 1">
+        <label class="form-label" for="parcelas">Parcelas</label>
+        <input type="number" class="form-control input-pequeno" formControlName="parcelas" placeholder="Ex: 10" />
+      </div>
+
+      <div class="col-md-2 d-flex flex-column">
+        <label class="form-label mb-1" for="dataInicio" style="margin-bottom: 8px !important;">Data de Início</label>
+        <p-calendar formControlName="dataInicio" inputId="dataInicio" dateFormat="dd/mm/yy" [locale]="ptBr"
+          class="w-full" [showIcon]="true" [iconDisplay]="'input'" [showOnFocus]="false"
+          placeholder="Selecione uma data">
+        </p-calendar>
+      </div>
+
+
+
+    </div>
+    <div class="col-md-2 d-flex align-items-end" style="margin-top: 10px;">
+      <p-checkbox inputId="ativa" formControlName="ativa" binary="true" label="Ativa?"></p-checkbox>
+    </div>
+
+    <div class="d-flex justify-content-left mt-4">
+      <button type="button" class="btn-limpar mx-2" (click)="limparFormulario()">Limpar</button>
+      <button type="submit" class="btn-salvar mx-2">
+        {{ idDespesa ? 'Editar Despesa' : 'Salvar Despesa' }}
+      </button>
+    </div>
+  </form>
+
+</p-card>
+
+<p-toast></p-toast>

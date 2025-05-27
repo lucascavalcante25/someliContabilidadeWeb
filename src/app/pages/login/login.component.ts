@@ -45,7 +45,7 @@ export class LoginComponent {
 
     this.authService.login(cpf.replace(/\D/g, ''), senha).subscribe({
       next: (res: any) => {
-        localStorage.setItem('token', res.token); // 👈 salva o token ANTES de redirecionar
+        localStorage.setItem('token', res.token);
 
         this.messageService.add({
           severity: 'success',
@@ -54,7 +54,7 @@ export class LoginComponent {
         });
 
         console.log('Login OK, redirecionando...');
-        this.router.navigateByUrl('/index'); // ou this.router.navigate(['/index']);
+        this.router.navigateByUrl('/index');
       },
       error: () => {
         this.messageService.add({

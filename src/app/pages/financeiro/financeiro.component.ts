@@ -5,8 +5,6 @@ import { BreadcrumbModule } from 'src/app/componentes/breadcrumb/breadcrumb.modu
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { FormBuilder, FormsModule } from '@angular/forms';
-
-// PrimeNG específicos do financeiro
 import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
@@ -34,7 +32,7 @@ import { FinanceiroService } from './financeiro.service';
 })
 export class FinanceiroComponent implements OnInit {
   breadcrumbs: any = [
-    { label: 'Início', url: '#' },
+    { label: 'Início', url: '/index' },
     { label: 'Financeiro', url: 'javascript:void(0)' }
   ];
   constructor(private fb: FormBuilder, private messageService: MessageService, private router: Router, private financeiroService: FinanceiroService, private route: ActivatedRoute) { }
@@ -75,6 +73,8 @@ export class FinanceiroComponent implements OnInit {
 
   ngOnInit(): void {
     this.buscarClientesDoBackend();
+    this.buscarDespesasDoBackend();
+
 
   }
 
@@ -125,4 +125,47 @@ export class FinanceiroComponent implements OnInit {
     this.totalPendente = mesAtual.filter(c => !c.pago).reduce((acc, c) => acc + c.honorario, 0);
     this.percentualAdimplencia = this.totalClientes > 0 ? Math.round((mesAtual.filter(c => c.pago).length / this.totalClientes) * 100) : 0;
   }
+
+
+  despesasPorMes: any[][] = [];
+  mesSelecionadoDespesas = new Date().getMonth();
+  totalDespesasAtivas = 0;
+  totalDespesasPagas = 0;
+  totalDespesasPendentes = 0;
+  percentualDespesasQuitadas = 0;
+
+  buscarDespesasDoBackend() {
+    const anoAtual = new Date().getFullYear();
+    this.meses.forEach((mes, i) => {
+      this.financeiroService.buscarDespesasPorMes(mes.key, anoAtual).subscribe(despesas => {
+        console.log(`Despesas do mês ${mes.key}:`, despesas); 
+        this.despesasPorMes[i] = despesas;
+        if (i === this.mesSelecionadoDespesas) {
+          this.atualizarDashboardDespesas();
+        }
+      });
+
+    });
+  }
+
+  atualizarStatusDespesa(despesa: any, indiceMes: number) {
+    this.financeiroService.atualizarStatusDespesa(despesa.id, despesa.paga).subscribe({
+      next: () => this.atualizarDashboardDespesas(),
+      error: err => {
+        console.error('Erro ao atualizar despesa:', err);
+        despesa.paga = !despesa.paga;
+      }
+    });
+  }
+
+  atualizarDashboardDespesas() {
+    const mesAtual = this.despesasPorMes[this.mesSelecionadoDespesas];
+    this.totalDespesasAtivas = mesAtual.length;
+    this.totalDespesasPagas = mesAtual.filter(d => d.paga).reduce((acc, d) => acc + d.valorMensal, 0);
+    this.totalDespesasPendentes = mesAtual.filter(d => !d.paga).reduce((acc, d) => acc + d.valorMensal, 0);
+    this.percentualDespesasQuitadas = this.totalDespesasAtivas > 0
+      ? Math.round((mesAtual.filter(d => d.paga).length / this.totalDespesasAtivas) * 100)
+      : 0;
+  }
+
 }

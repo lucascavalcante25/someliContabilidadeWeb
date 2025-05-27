@@ -10,6 +10,8 @@ import { UsuarioCriarNovoComponent } from './pages/usuario/usuario-criar-novo/us
 import { UsuarioListarComponent } from './pages/usuario/usuario-listar/usuario-listar.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './auth.guard';
+import { DespesasCriarNovoComponent } from './pages/financeiro/despesa-criar-novo/despesas-criar-novo.component';
+import { DespesasListarComponent } from './pages/financeiro/despesa-listar/despesas-listar.component';
 
 
 
@@ -35,7 +37,11 @@ const routes: Routes = [
       { path: 'financeiro', component: FinanceiroComponent, canActivate: [AuthGuard] },
       { path: 'usuario-criar-novo', component: UsuarioCriarNovoComponent, canActivate: [AuthGuard] },
       { path: 'usuario-criar-novo/:id', component: UsuarioCriarNovoComponent, canActivate: [AuthGuard] },
-      { path: 'usuario-listar', component: UsuarioListarComponent, canActivate: [AuthGuard] }
+      { path: 'usuario-listar', component: UsuarioListarComponent, canActivate: [AuthGuard] },
+      { path: 'despesas-criar-novo', component: DespesasCriarNovoComponent, canActivate: [AuthGuard] },
+      { path: 'despesas-criar-novo/:id', component: DespesasCriarNovoComponent, canActivate: [AuthGuard] },
+      { path: 'despesas-listar', component: DespesasListarComponent, canActivate: [AuthGuard] },
+
     ]
   },
 

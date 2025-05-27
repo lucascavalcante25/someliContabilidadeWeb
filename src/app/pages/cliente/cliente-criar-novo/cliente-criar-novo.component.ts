@@ -35,8 +35,12 @@ import { Cliente } from '../cliente-listar/cliente.model';
 
 })
 export class ClienteCriarNovoComponent {
-  breadcrumbs: any = [{ "label": "Início", "url": "#" }, { "label": "Nova consulta", "url": "javascript:void(0)" }];
-
+  breadcrumbs: any = [
+    { label: 'Início', url: '/index' },
+    { label: 'Lista de clientes', url: '/cliente-listar' }, {label: 'Criar novo cliente', url: '/cliente-criar-novo'}
+  ];
+  
+  
   tiposPagamento = [
     { key: 1, label: 'Física' },
     { key: 2, label: 'Jurídica' },

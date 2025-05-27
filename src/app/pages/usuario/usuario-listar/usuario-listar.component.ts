@@ -12,6 +12,13 @@ import { MessageService } from 'primeng/api';
 import { finalize } from 'rxjs/operators';
 import { UsuarioService } from '../usuario.service';
 import { Usuario } from '../usuario.model';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { DividerModule } from 'primeng/divider';
+import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
+import { CardModule } from 'primeng/card';
+
 
 interface PageEvent {
   first: number;
@@ -25,13 +32,16 @@ interface PageEvent {
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,
     ReactiveFormsModule,
-    PrimeNgModule,
-    BreadcrumbModule,
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    DialogModule,
     ToastModule,
+    DividerModule,
     PaginatorModule,
-    ProgressSpinnerModule
+    CardModule,
+    BreadcrumbModule
   ],
   templateUrl: './usuario-listar.component.html',
   styleUrls: ['./usuario-listar.component.css'],
@@ -44,13 +54,13 @@ export class UsuarioListarComponent {
   usuarios: Usuario[] = [];
   usuariosFiltrados: Usuario[] = [];
   breadcrumbs = [
-    { label: 'Início', url: '#' },
-    { label: 'Lista de usuários', url: '#/usuario-listar' }
+    { label: 'Início', url: '/index' },
+    { label: 'Lista de usuários', url: '/usuario-listar' }
   ];
   tiposPerfil = [
     { key: 1, label: 'Administrador' }
   ];
-  
+
   totalElements = 0;
   pageSize = 5;
   pageIndex = 0;
@@ -67,7 +77,7 @@ export class UsuarioListarComponent {
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getListaDeUsuarios();
@@ -106,21 +116,6 @@ export class UsuarioListarComponent {
     this.modalExclusaoVisivel = true;
   }
 
-  // excluirUsuario() {
-  //   if (!this.usuarioSelecionado?.id) return;
-
-  //   this.usuarioService.excluir(this.usuarioSelecionado.id).subscribe({
-  //     next: () => {
-  //       this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Usuário excluído com sucesso!' });
-  //       this.getListaDeUsuarios();
-  //       this.modalExclusaoVisivel = false;
-  //     },
-  //     error: () => {
-  //       this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao excluir usuário!' });
-  //       this.modalExclusaoVisivel = false;
-  //     }
-  //   });
-  // }
   getLabelPerfil(codigo: number): string {
     const perfil = this.tiposPerfil.find(p => p.key === codigo);
     return perfil ? perfil.label : 'Desconhecido';
@@ -130,7 +125,7 @@ export class UsuarioListarComponent {
     const apenasNumeros = cpf.replace(/\D/g, '');
     return apenasNumeros.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
   }
-    
+
   filtrarUsuarios() {
     const pesquisa = this.pesquisar.toLowerCase();
 

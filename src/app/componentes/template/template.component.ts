@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { jwtDecode } from 'jwt-decode';
+import { AuthService } from 'src/app/auth.service';
+
 
 @Component({
   selector: 'app-template',
@@ -24,7 +27,9 @@ export class TemplateComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     public dialogService: DialogService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    public authService: AuthService,
+
   ) {
     this.options = this.formBuilder.group({
       bottom: 0,
@@ -74,6 +79,12 @@ export class TemplateComponent implements OnInit, OnDestroy {
         routerLink: '/usuario-listar',
         command: () => this.toggleMenu()
       },
+      {
+        label: 'Despesas',
+        icon: 'fa fa-money-bill-wave',
+        routerLink: '/despesas-listar',
+        command: () => this.toggleMenu()
+      },
     ];
   }
 
@@ -100,22 +111,23 @@ export class TemplateComponent implements OnInit, OnDestroy {
     return this.isSmallScreen ? 'over' : 'side';
   }
 
-  logout() {
-    localStorage.removeItem('token');
 
-    // opcional: mensagem de saída
+
+  
+  estaLogado(): boolean {
+    return this.authService.isAuthenticated();
+  }
+  
+  logout(): void {
+    this.authService.logout();
     this.messageService.add({
       severity: 'info',
       summary: 'Logout',
       detail: 'Você saiu do sistema.'
     });
-
     this.router.navigate(['/login']);
   }
-  estaLogado(): boolean {
-    return !!localStorage.getItem('token');
-  }
-
+  
 
   mostrarToolbar(): boolean {
     // oculta a barra quando estiver na página de login
@@ -134,3 +146,4 @@ export class TemplateComponent implements OnInit, OnDestroy {
   //   });
   // }
 }
+
