@@ -11,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FinanceiroService } from './financeiro.service';
+import { ChartModule } from 'primeng/chart';
 
 @Component({
   selector: 'app-financeiro',
@@ -24,7 +25,8 @@ import { FinanceiroService } from './financeiro.service';
     CardModule,
     TabViewModule,
     TableModule,
-    CheckboxModule
+    CheckboxModule,
+    ChartModule // Adicionado para gráficos
   ],
   templateUrl: './financeiro.component.html',
   styleUrl: './financeiro.component.css',
@@ -71,11 +73,34 @@ export class FinanceiroComponent implements OnInit {
   totalPendente = 0;
   percentualAdimplencia = 0;
 
+  chartClientesData: any;
+  chartClientesOptions: any;
+  chartDespesasData: any;
+  chartDespesasOptions: any;
+
   ngOnInit(): void {
+    this.initChartOptions();
     this.buscarClientesDoBackend();
     this.buscarDespesasDoBackend();
 
 
+  }
+
+  initChartOptions() {
+    this.chartClientesOptions = {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: { display: true, text: 'Recebimentos de Clientes' }
+      }
+    };
+    this.chartDespesasOptions = {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: { display: true, text: 'Controle de Despesas' }
+      }
+    };
   }
 
   buscarClientesDoBackend() {
@@ -119,11 +144,28 @@ export class FinanceiroComponent implements OnInit {
 
 
   atualizarDashboard() {
-    const mesAtual = this.clientesPorMes[this.mesSelecionado];
+    const mesAtual = this.clientesPorMes[this.mesSelecionado] || [];
     this.totalClientes = mesAtual.length;
     this.totalRecebido = mesAtual.filter(c => c.pago).reduce((acc, c) => acc + c.honorario, 0);
     this.totalPendente = mesAtual.filter(c => !c.pago).reduce((acc, c) => acc + c.honorario, 0);
     this.percentualAdimplencia = this.totalClientes > 0 ? Math.round((mesAtual.filter(c => c.pago).length / this.totalClientes) * 100) : 0;
+    this.atualizarGraficoClientes();
+  }
+
+  atualizarGraficoClientes() {
+    const mesAtual = this.clientesPorMes[this.mesSelecionado] || [];
+    const pagos = mesAtual.filter(c => c.pago).reduce((acc, c) => acc + c.honorario, 0);
+    const pendentes = mesAtual.filter(c => !c.pago).reduce((acc, c) => acc + c.honorario, 0);
+    this.chartClientesData = {
+      labels: ['Recebido', 'Pendente'],
+      datasets: [
+        {
+          data: [pagos, pendentes],
+          backgroundColor: ['#22c55e', '#ef4444'],
+          hoverBackgroundColor: ['#16a34a', '#b91c1c']
+        }
+      ]
+    };
   }
 
 
@@ -138,34 +180,68 @@ export class FinanceiroComponent implements OnInit {
     const anoAtual = new Date().getFullYear();
     this.meses.forEach((mes, i) => {
       this.financeiroService.buscarDespesasPorMes(mes.key, anoAtual).subscribe(despesas => {
-        console.log(`Despesas do mês ${mes.key}:`, despesas); 
-        this.despesasPorMes[i] = despesas;
+        this.despesasPorMes[i] = despesas.map(d => ({
+          ...d,
+          paga: !!d.paga 
+        }));
+        console.log(`Despesas para ${mes.label}:`, this.despesasPorMes[i]);
+
         if (i === this.mesSelecionadoDespesas) {
           this.atualizarDashboardDespesas();
         }
       });
-
     });
   }
 
   atualizarStatusDespesa(despesa: any, indiceMes: number) {
-    this.financeiroService.atualizarStatusDespesa(despesa.id, despesa.paga).subscribe({
+    const mes = this.meses[indiceMes].key;
+    const ano = new Date().getFullYear();
+
+    this.financeiroService.atualizarStatusDespesa(despesa.id, despesa.paga, mes, ano).subscribe({
       next: () => this.atualizarDashboardDespesas(),
       error: err => {
         console.error('Erro ao atualizar despesa:', err);
-        despesa.paga = !despesa.paga;
+        despesa.paga = !despesa.paga; 
       }
     });
   }
 
+
   atualizarDashboardDespesas() {
-    const mesAtual = this.despesasPorMes[this.mesSelecionadoDespesas];
+    const mesAtual = this.despesasPorMes[this.mesSelecionadoDespesas] || [];
     this.totalDespesasAtivas = mesAtual.length;
     this.totalDespesasPagas = mesAtual.filter(d => d.paga).reduce((acc, d) => acc + d.valorMensal, 0);
     this.totalDespesasPendentes = mesAtual.filter(d => !d.paga).reduce((acc, d) => acc + d.valorMensal, 0);
     this.percentualDespesasQuitadas = this.totalDespesasAtivas > 0
       ? Math.round((mesAtual.filter(d => d.paga).length / this.totalDespesasAtivas) * 100)
       : 0;
+    this.atualizarGraficoDespesas();
+  }
+
+  atualizarGraficoDespesas() {
+    const mesAtual = this.despesasPorMes[this.mesSelecionadoDespesas] || [];
+    const pagas = mesAtual.filter(d => d.paga).reduce((acc, d) => acc + d.valorMensal, 0);
+    const pendentes = mesAtual.filter(d => !d.paga).reduce((acc, d) => acc + d.valorMensal, 0);
+    this.chartDespesasData = {
+      labels: ['Pagas', 'Pendentes'],
+      datasets: [
+        {
+          data: [pagas, pendentes],
+          backgroundColor: ['#22c55e', '#ef4444'],
+          hoverBackgroundColor: ['#16a34a', '#b91c1c']
+        }
+      ]
+    };
+  }
+
+  // Atualizar gráficos ao trocar de aba
+  onTabChangeClientes(event: any) {
+    this.mesSelecionado = event.index;
+    this.atualizarDashboard();
+  }
+  onTabChangeDespesas(event: any) {
+    this.mesSelecionadoDespesas = event.index;
+    this.atualizarDashboardDespesas();
   }
 
 }

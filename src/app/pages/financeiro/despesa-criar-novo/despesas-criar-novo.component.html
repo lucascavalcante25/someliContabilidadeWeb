@@ -44,7 +44,7 @@
         </p-treeSelect>
       </div>
 
-      <div class="col-md-2" *ngIf="(formulario.get('tipo')?.value?.key ?? formulario.get('tipo')?.value) === 3">
+      <div class="col-md-2">
         <label class="form-label" for="diaPagamento">Dia de Pagamento</label>
         <p-treeSelect id="diaPagamento" class="w-full input-pequeno" [options]="diasVencimento"
           formControlName="diaPagamento" optionLabel="label" optionValue="key"

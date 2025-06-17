@@ -126,10 +126,11 @@ export class DespesasCriarNovoComponent {
               valorMensal: Number(despesa.valorMensal),
               tipo: this.tiposDespesa.find(t => t.key === despesa.tipo),
               parcelas: despesa.parcelas,
-              diaPagamento: despesa.diaPagamento,
+              diaPagamento: this.diasVencimento.find(d => d.key === despesa.diaPagamento), 
               dataInicio: new Date(despesa.dataInicio),
               ativa: despesa.ativa
             });
+
         },
         error: () => {
           this.messageService.add({

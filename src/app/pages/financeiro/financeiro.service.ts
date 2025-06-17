@@ -40,16 +40,21 @@ export class FinanceiroService {
         });
 
     }
-    
+
     buscarDespesasPorMes(mes: string, ano: number): Observable<any[]> {
         return this.http.get<any[]>(`${this.baseUrl}/despesas/financeiro`, {
             params: { mes, ano }
         });
     }
 
-    atualizarStatusDespesa(despesaId: number, paga: boolean): Observable<void> {
-        return this.http.put<void>(`${this.baseUrl}/despesas/status`, paga, {
-            params: { despesaId, paga }
+    atualizarStatusDespesa(id: number, pago: boolean, mes: string, ano: number) {
+        return this.http.put(`${this.baseUrl}/despesas/status`, pago, {
+            params: {
+                despesaId: id,
+                mes,
+                ano
+            }
         });
     }
+
 }

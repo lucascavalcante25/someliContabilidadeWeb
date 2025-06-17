@@ -33,9 +33,13 @@ mat-sidenav-container {
 }
 
 .someli-toolbar-logo {
-  max-width: 120px; /* Aumenta o tamanho máximo da logo */
-  height: auto; /* Mantém a proporção da imagem */
+     max-height: 102px;
+    height: auto;
+    width: auto;
+    margin-top: -28px;
 }
+
+
 
 
 .content {
@@ -60,7 +64,8 @@ mat-nav-list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 56px; /* Largura mínima quando fechada */
+  min-width: 56px;
+  /* Largura mínima quando fechada */
 }
 
 mat-icon {
@@ -83,13 +88,13 @@ mat-icon {
   color: #374151 !important;
 }
 
-.logout { 
+.logout {
   color: white;
 }
 
 .toolbar-title {
   color: white;
-  font-size: 22px; 
+  font-size: 22px;
   margin-left: 555px;
   display: flex;
 }
@@ -100,9 +105,12 @@ mat-icon {
 
 /* Sobrescreve a posição do ícone para o item "Consultas" */
 .p-panelmenu .ui-menuitem .pi-share-alt {
-  margin-left: auto !important;  /* Move o ícone para o lado direito */
-  margin-right: 0 !important;    /* Remove margem à direita */
-  display: inline-block;         /* Assegura que o ícone se comporta como bloco inline */
+  margin-left: auto !important;
+  /* Move o ícone para o lado direito */
+  margin-right: 0 !important;
+  /* Remove margem à direita */
+  display: inline-block;
+  /* Assegura que o ícone se comporta como bloco inline */
 }
 
 /* Opcional: Garante que o texto do item ocupe o restante do espaço */
@@ -111,13 +119,10 @@ mat-icon {
 }
 
 .p-panelmenu {
-  margin-left: 100px  !important;
+  margin-left: 100px !important;
 }
 
 :host ::ng-deep .p-panelmenu .p-panelmenu-header .p-panelmenu-header-content a .p-icon-wrapper {
   position: absolute;
   right: 10px
 }
-
-
-

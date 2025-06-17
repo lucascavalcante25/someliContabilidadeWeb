@@ -1,61 +1,65 @@
 <div class="p-4 space-y-4">
-
   <!-- Título -->
-  <h2 class="text-3xl font-bold text-purple-900 mb-4" style="margin-left: 800px;">Financeiro - Someli Contabilidade</h2>
+  <h2 class="titulo-financeiro">Financeiro - Someli Contabilidade</h2>
 
-  <!-- DASHBOARD CLIENTES -->
-  <!-- DASHBOARD UNIFICADO: Clientes + Despesas -->
-  <div class="grid grid-cols-1 md:grid-cols-8 gap-4">
-    <!-- Clientes -->
-    <div class="bg-white shadow rounded-lg p-4 text-center" style="margin-left: 100px;">
-      <div class="text-gray-500 text-sm">Clientes Ativos</div>
-      <div class="text-3xl font-bold text-gray-800 mt-1">{{ totalClientes }}</div>
+  <!-- GRÁFICOS E CARDS LADO A LADO -->
+  <div class="graficos-dashboard-container">
+    <!-- Bloco Clientes -->
+    <div class="grafico-dashboard-bloco">
+      <div class="dashboard-cards-col">
+        <div class="dashboard-card">
+          <div class="text-gray-500 text-sm">Clientes Ativos</div>
+          <div class="text-3xl font-bold text-gray-800 mt-1">{{ totalClientes }}</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="text-gray-500 text-sm">Pagamentos Recebidos</div>
+          <div class="text-3xl font-bold text-green-600 mt-1">R$ {{ totalRecebido | number:'1.2-2' }}</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="text-gray-500 text-sm">Pagamentos Pendentes</div>
+          <div class="text-3xl font-bold text-red-600 mt-1">R$ {{ totalPendente | number:'1.2-2' }}</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="text-gray-500 text-sm">% Adimplência</div>
+          <div class="text-3xl font-bold text-blue-700 mt-1">{{ percentualAdimplencia }}%</div>
+        </div>
+      </div>
+      <div class="grafico-box">
+        <p-chart type="pie" [data]="chartClientesData" [options]="chartClientesOptions" style="width: 320px; height: 320px;"></p-chart>
+      </div>
     </div>
-
-    <div class="bg-white shadow rounded-lg p-4 text-center">
-      <div class="text-gray-500 text-sm">Pagamentos Recebidos</div>
-      <div class="text-3xl font-bold text-green-600 mt-1">R$ {{ totalRecebido | number:'1.2-2' }}</div>
-    </div>
-
-    <div class="bg-white shadow rounded-lg p-4 text-center">
-      <div class="text-gray-500 text-sm">Pagamentos Pendentes</div>
-      <div class="text-3xl font-bold text-red-600 mt-1">R$ {{ totalPendente | number:'1.2-2' }}</div>
-    </div>
-
-    <div class="bg-white shadow rounded-lg p-4 text-center">
-      <div class="text-gray-500 text-sm">% Adimplência</div>
-      <div class="text-3xl font-bold text-blue-700 mt-1">{{ percentualAdimplencia }}%</div>
-    </div>
-
-    <!-- Despesas -->
-    <div class="bg-white shadow rounded-lg p-4 text-center" style="margin-left: 335px;">
-      <div class="text-gray-500 text-sm">Despesas Ativas</div>
-      <div class="text-3xl font-bold text-gray-800 mt-1">{{ totalDespesasAtivas }}</div>
-    </div>
-
-    <div class="bg-white shadow rounded-lg p-4 text-center">
-      <div class="text-gray-500 text-sm">Despesas Pagas</div>
-      <div class="text-3xl font-bold text-green-600 mt-1">R$ {{ totalDespesasPagas | number:'1.2-2' }}</div>
-    </div>
-
-    <div class="bg-white shadow rounded-lg p-4 text-center">
-      <div class="text-gray-500 text-sm">Despesas Pendentes</div>
-      <div class="text-3xl font-bold text-red-600 mt-1">R$ {{ totalDespesasPendentes | number:'1.2-2' }}</div>
-    </div>
-
-    <div class="bg-white shadow rounded-lg p-4 text-center">
-      <div class="text-gray-500 text-sm">% Desp. Quitadas</div>
-      <div class="text-3xl font-bold text-blue-700 mt-1">{{ percentualDespesasQuitadas }}%</div>
+    <!-- Bloco Despesas -->
+    <div class="grafico-dashboard-bloco">
+      <div class="grafico-box">
+        <p-chart type="pie" [data]="chartDespesasData" [options]="chartDespesasOptions" style="width: 320px; height: 320px;"></p-chart>
+      </div>
+      <div class="dashboard-cards-col">
+        <div class="dashboard-card">
+          <div class="text-gray-500 text-sm">Despesas Ativas</div>
+          <div class="text-3xl font-bold text-gray-800 mt-1">{{ totalDespesasAtivas }}</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="text-gray-500 text-sm">Despesas Pagas</div>
+          <div class="text-3xl font-bold text-green-600 mt-1">R$ {{ totalDespesasPagas | number:'1.2-2' }}</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="text-gray-500 text-sm">Despesas Pendentes</div>
+          <div class="text-3xl font-bold text-red-600 mt-1">R$ {{ totalDespesasPendentes | number:'1.2-2' }}</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="text-gray-500 text-sm">% Desp. Quitadas</div>
+          <div class="text-3xl font-bold text-blue-700 mt-1">{{ percentualDespesasQuitadas }}%</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- TABELAS LADO A LADO -->
   <div class="flex gap-6 mt-6 flex-wrap md:flex-nowrap">
-
     <!-- Tabela de Clientes -->
     <div class="flex-1">
       <h3 class="text-lg font-bold text-purple-900 mb-2">Recebimentos de Clientes</h3>
-      <p-tabView [(activeIndex)]="mesSelecionado">
+      <p-tabView [(activeIndex)]="mesSelecionado" (onChange)="onTabChangeClientes($event)">
         <p-tabPanel *ngFor="let mes of meses; let i = index" [header]="mes.label">
           <p-table [value]="clientesPorMes[i]" [responsiveLayout]="'scroll'" class="p-datatable-sm"
             styleClass="p-datatable-gridlines" style="width: 100%;">
@@ -88,7 +92,7 @@
     <!-- Tabela de Despesas -->
     <div class="flex-1">
       <h3 class="text-lg font-bold text-purple-900 mb-2">Controle de Despesas</h3>
-      <p-tabView [(activeIndex)]="mesSelecionadoDespesas">
+      <p-tabView [(activeIndex)]="mesSelecionadoDespesas" (onChange)="onTabChangeDespesas($event)">
         <p-tabPanel *ngFor="let mes of meses; let i = index" [header]="mes.label">
           <p-table [value]="despesasPorMes[i]" [responsiveLayout]="'scroll'" class="p-datatable-sm"
             styleClass="p-datatable-gridlines" style="width: 100%;">
@@ -96,7 +100,7 @@
               <tr>
                 <th>Descrição</th>
                 <th>Valor</th>
-                <th>Vencimento</th>
+                <th>Dia de pagamento</th>
                 <th class="text-center">Pago?</th>
               </tr>
             </ng-template>
@@ -104,10 +108,13 @@
               <tr>
                 <td>{{ despesa.descricao }}</td>
                 <td>R$ {{ despesa.valorMensal | number:'1.2-2' }}</td>
-                <td>{{ despesa.dataVencimento | date:'dd/MM/yyyy' }}</td>
+                <td *ngIf="despesa.diaPagamento">{{ despesa.diaPagamento }}</td>
+                <td *ngIf="!despesa.diaPagamento">-</td>
                 <td class="text-center">
-                  <p-checkbox [(ngModel)]="despesa.paga" binary="true"
-                    (onChange)="atualizarStatusDespesa(despesa, i)"></p-checkbox>
+                  <p-checkbox [binary]="true" [(ngModel)]="despesa.paga"
+                    (onChange)="atualizarStatusDespesa(despesa, i)">
+                  </p-checkbox>
+
                 </td>
               </tr>
             </ng-template>
@@ -115,6 +122,5 @@
         </p-tabPanel>
       </p-tabView>
     </div>
-
   </div>
 </div>
