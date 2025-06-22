@@ -43,29 +43,27 @@
           [selectionMode]="'single'">
         </p-treeSelect>
       </div>
-
+    </div>
+    <div class="row">
       <div class="col-md-2">
         <label class="form-label" for="diaPagamento">Dia de Pagamento</label>
         <p-treeSelect id="diaPagamento" class="w-full input-pequeno" [options]="diasVencimento"
           formControlName="diaPagamento" optionLabel="label" optionValue="key"
-          placeholder="Selecione o dia de pagamento">
+          placeholder="Dia de pagamento">
         </p-treeSelect>
       </div>
-
-
-
+      
+      <div class="col-md-2">
+        <label class="form-label" for="dataInicio" style="margin-bottom: 8px !important;">Data de Início</label>
+        <p-calendar formControlName="dataInicio" inputId="dataInicio" dateFormat="dd/mm/yy" [locale]="ptBr" class="w-full"
+          [showIcon]="true" [iconDisplay]="'input'" [showOnFocus]="false" placeholder="Selecione uma data">
+        </p-calendar>
+      </div>
       <div class="col-md-2" *ngIf="(formulario.get('tipo')?.value?.key || formulario.get('tipo')?.value) === 1">
         <label class="form-label" for="parcelas">Parcelas</label>
         <input type="number" class="form-control input-pequeno" formControlName="parcelas" placeholder="Ex: 10" />
       </div>
 
-      <div class="col-md-2 d-flex flex-column">
-        <label class="form-label mb-1" for="dataInicio" style="margin-bottom: 8px !important;">Data de Início</label>
-        <p-calendar formControlName="dataInicio" inputId="dataInicio" dateFormat="dd/mm/yy" [locale]="ptBr"
-          class="w-full" [showIcon]="true" [iconDisplay]="'input'" [showOnFocus]="false"
-          placeholder="Selecione uma data">
-        </p-calendar>
-      </div>
 
 
 
